@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+    <meta type="array">
+        <description></description>
+        <type>module</type>
+        <csh_table></csh_table>
+        <fileId>EXT:eu_ldap/mod1/locallang.xml</fileId>
+        <labelContext type="array">
+            <label index="title"></label>
+            <label index="function1"></label>
+            <label index="function2"></label>
+            <label index="function3"></label>
+            <label index="function4"></label>
+            <label index="function5"></label>
+            <label index="function6"></label>
+            <label index="function7"></label>
+            <label index="users"></label>
+            <label index="new"></label>
+            <label index="deleted"></label>
+            <label index="account"></label>
+            <label index="name"></label>
+            <label index="group"></label>
+            <label index="phone"></label>
+            <label index="email"></label>
+            <label index="ldap"></label>
+            <label index="no_servers"></label>
+            <label index="rownumber_limit"></label>
+            <label index="submit"></label>
+        </labelContext>
+    </meta>
+    <data type="array">
+        <languageKey index="default" type="array">
+            <label index="title">LDAP Integration</label>
+            <label index="function1">summary</label>
+            <label index="function2">Frontend: refresh user data from directory</label>
+            <label index="function3">Frontend: import new users from directory</label>
+            <label index="function4">Frontend: delete users not in directory</label>
+            <label index="function5">Backend: refresh user data from directory</label>
+            <label index="function6">Backend: import new users from directory</label>
+            <label index="function7">Backend: delete users not in directory</label>
+            <label index="users">users</label>
+            <label index="new">new</label>
+            <label index="deleted">deleted</label>
+            <label index="account">account</label>
+            <label index="name">name</label>
+            <label index="group">usergroup</label>
+            <label index="phone">telephone</label>
+            <label index="email">email</label>
+            <label index="ldap">LDAP server</label>
+            <label index="no_servers">No LDAP servers defined.</label>
+            <label index="rownumber_limit">Only the first 10 records are shown!.</label>
+            <label index="submit">START!</label>
+        </languageKey>
+        <languageKey index="dk" type="array">
+        </languageKey>
+        <languageKey index="de" type="array">
+            <label index="title">LDAP Integration</label>
+            <label index="function1">&amp;Uuml;bersicht</label>
+            <label index="function2">Frontend: Benutzerdaten aus dem Verzeichnis aktualisieren</label>
+            <label index="function3">Frontend: Neue Benutzer aus dem Verzeichnis importieren</label>
+            <label index="function4">Frontend: Benutzer ohne Verzeichniseintrag l&amp;ouml;schen</label>
+            <label index="function5">Backend: Benutzerdaten aus dem Verzeichnis aktualisieren</label>
+            <label index="function6">Backend: Neue Benutzer aus dem Verzeichnis importieren</label>
+            <label index="function7">Backend: Benutzer ohne Verzeichniseintrag l&amp;ouml;schen</label>
+            <label index="users">Benutzer</label>
+            <label index="new">neue</label>
+            <label index="deleted">geloeschte</label>
+            <label index="account">Account</label>
+            <label index="name">Name</label>
+            <label index="group">Gruppe</label>
+            <label index="phone">Telefon</label>
+            <label index="email">e-Mail</label>
+            <label index="ldap">LDAP-Server</label>
+            <label index="no_servers">Keine LDAP-Server angelegt.</label>
+            <label index="rownumber_limit">Es werden nur die ersten 10 Datens�tze angezeigt!.</label>
+            <label index="submit">START!</label>
+        </languageKey>
+        <languageKey index="no" type="array">
+        </languageKey>
+        <languageKey index="it" type="array">
+            <label index="title">Integrazione con LDAP</label>
+            <label index="function1">riassunto</label>
+            <label index="function2">Frontend: aggiorna i dati degli utenti dalla directory</label>
+            <label index="function3">Frontend: importa i nuovi utenti dalla directory</label>
+            <label index="function4">Frontend: elimina gli utenti non presenti nella directory</label>
+            <label index="function5">Backend: aggiorna i dati degli utenti dalla directory</label>
+            <label index="function6">Backend: importa i nuovi utenti dalla directory</label>
+            <label index="function7">Backend: elimina gli utenti non presenti nella directory</label>
+            <label index="users">utenti</label>
+            <label index="new">nuovo</label>
+            <label index="deleted">eliminati</label>
+            <label index="account">account</label>
+            <label index="name">nome</label>
+            <label index="group">gruppo</label>
+            <label index="phone">telefono</label>
+            <label index="email">email</label>
+            <label index="ldap">server LDAP</label>
+            <label index="no_servers">Non è stato definito nessun server LDAP</label>
+        </languageKey>
+        <languageKey index="fr" type="array">
+        </languageKey>
+        <languageKey index="es" type="array">
+        </languageKey>
+        <languageKey index="nl" type="array">
+        </languageKey>
+        <languageKey index="cz" type="array">
+        </languageKey>
+        <languageKey index="pl" type="array">
+        </languageKey>
+        <languageKey index="si" type="array">
+        </languageKey>
+        <languageKey index="fi" type="array">
+            <label index="title">LDAP integrointi</label>
+            <label index="function1">yhteenveto</label>
+            <label index="function2">Frontend: virkistä käyttäjätiedot hakemistosta</label>
+            <label index="function3">Frontend: hae uudet käyttäjät hakemistosta</label>
+            <label index="function4">Frontend: poista käyttäjät jotka eivät ole hakemistossa</label>
+            <label index="function5">Frontend: virkistä käyttäjätiedot hakemistosta</label>
+            <label index="function6">Frontend: hae uudet käyttäjät hakemistosta</label>
+            <label index="function7">Frontend: poista käyttäjät jotka eivät ole hakemistossa</label>
+            <label index="users">käyttäjät</label>
+            <label index="new">uusi</label>
+            <label index="deleted">poistetut</label>
+            <label index="account">tili</label>
+            <label index="name">nimi</label>
+            <label index="group">käyttäjäryhmä</label>
+            <label index="phone">puhelin</label>
+            <label index="email">sähköpostiosoite</label>
+            <label index="ldap">LDAP palvelin</label>
+            <label index="no_servers">LDAP palvelinta ei määritetty</label>
+        </languageKey>
+        <languageKey index="tr" type="array">
+        </languageKey>
+        <languageKey index="se" type="array">
+            <label index="title">LDAP Integration</label>
+            <label index="function1">sammanfattning</label>
+            <label index="function2">Frontend: uppdatera användardata från katalogen</label>
+            <label index="function3">Frontend: importera nya användare från katalogen</label>
+            <label index="function4">Frontend:  ta bort användare som inte finns i katalogen</label>
+            <label index="function5">Backend: uppdatera användardata från katalogen</label>
+            <label index="function6">Backend: importera nya användare från katalogen</label>
+            <label index="function7">Backend: ta bort användare som inte finns i katalogen</label>
+            <label index="users">användare</label>
+            <label index="new">ny</label>
+            <label index="deleted">raderad</label>
+            <label index="account">konto</label>
+            <label index="name">namn</label>
+            <label index="group">användargrupp</label>
+            <label index="phone">telefon</label>
+            <label index="email">epost</label>
+            <label index="ldap">LDAP server</label>
+            <label index="no_servers">Ingen LDAP-server definierad</label>
+        </languageKey>
+        <languageKey index="pt" type="array">
+        </languageKey>
+        <languageKey index="ru" type="array">
+        </languageKey>
+        <languageKey index="ro" type="array">
+        </languageKey>
+        <languageKey index="ch" type="array">
+        </languageKey>
+        <languageKey index="sk" type="array">
+        </languageKey>
+        <languageKey index="lt" type="array">
+        </languageKey>
+        <languageKey index="is" type="array">
+        </languageKey>
+        <languageKey index="hr" type="array">
+        </languageKey>
+        <languageKey index="hu" type="array">
+        </languageKey>
+        <languageKey index="gl" type="array">
+        </languageKey>
+        <languageKey index="th" type="array">
+        </languageKey>
+        <languageKey index="gr" type="array">
+        </languageKey>
+        <languageKey index="hk" type="array">
+        </languageKey>
+        <languageKey index="eu" type="array">
+        </languageKey>
+        <languageKey index="bg" type="array">
+        </languageKey>
+        <languageKey index="br" type="array">
+        </languageKey>
+        <languageKey index="et" type="array">
+        </languageKey>
+        <languageKey index="ar" type="array">
+        </languageKey>
+        <languageKey index="he" type="array">
+        </languageKey>
+        <languageKey index="ua" type="array">
+        </languageKey>
+        <languageKey index="lv" type="array">
+        </languageKey>
+        <languageKey index="jp" type="array">
+        </languageKey>
+    </data>
+    <orig_hash type="array">
+        <languageKey index="default" type="array">
+            <label index="title" type="integer">200168034</label>
+            <label index="function1" type="integer">176216594</label>
+            <label index="function2" type="integer">115749511</label>
+            <label index="function3" type="integer">67806393</label>
+            <label index="function4" type="integer">97004563</label>
+            <label index="function5" type="integer">21721615</label>
+            <label index="function6" type="integer">179231801</label>
+            <label index="function7" type="integer">205685812</label>
+            <label index="users" type="integer">163341762</label>
+            <label index="new" type="integer">36369989</label>
+            <label index="deleted" type="integer">228983536</label>
+            <label index="account" type="integer">237405251</label>
+            <label index="name" type="integer">184977713</label>
+            <label index="group" type="integer">72909580</label>
+            <label index="phone" type="integer">194754535</label>
+            <label index="email" type="integer">13123415</label>
+            <label index="ldap" type="integer">49285125</label>
+            <label index="no_servers" type="integer">13229180</label>
+        </languageKey>
+        <languageKey index="dk" type="array">
+        </languageKey>
+        <languageKey index="de" type="array">
+            <label index="title" type="integer">200168034</label>
+            <label index="function1" type="integer">176216594</label>
+            <label index="function2" type="integer">115749511</label>
+            <label index="function3" type="integer">67806393</label>
+            <label index="function4" type="integer">97004563</label>
+            <label index="function5" type="integer">21721615</label>
+            <label index="function6" type="integer">179231801</label>
+            <label index="function7" type="integer">205685812</label>
+            <label index="users" type="integer">163341762</label>
+            <label index="new" type="integer">36369989</label>
+            <label index="deleted" type="integer">228983536</label>
+            <label index="account" type="integer">237405251</label>
+            <label index="name" type="integer">184977713</label>
+            <label index="group" type="integer">72909580</label>
+            <label index="phone" type="integer">194754535</label>
+            <label index="email" type="integer">13123415</label>
+            <label index="ldap" type="integer">49285125</label>
+            <label index="no_servers" type="integer">13229180</label>
+        </languageKey>
+        <languageKey index="no" type="array">
+        </languageKey>
+        <languageKey index="it" type="array">
+            <label index="title" type="integer">200168034</label>
+            <label index="function1" type="integer">176216594</label>
+            <label index="function2" type="integer">115749511</label>
+            <label index="function3" type="integer">67806393</label>
+            <label index="function4" type="integer">97004563</label>
+            <label index="function5" type="integer">21721615</label>
+            <label index="function6" type="integer">179231801</label>
+            <label index="function7" type="integer">205685812</label>
+            <label index="users" type="integer">163341762</label>
+            <label index="new" type="integer">36369989</label>
+            <label index="deleted" type="integer">228983536</label>
+            <label index="account" type="integer">237405251</label>
+            <label index="name" type="integer">184977713</label>
+            <label index="group" type="integer">72909580</label>
+            <label index="phone" type="integer">194754535</label>
+            <label index="email" type="integer">13123415</label>
+            <label index="ldap" type="integer">49285125</label>
+            <label index="no_servers" type="integer">13229180</label>
+        </languageKey>
+        <languageKey index="fr" type="array">
+        </languageKey>
+        <languageKey index="es" type="array">
+        </languageKey>
+        <languageKey index="nl" type="array">
+        </languageKey>
+        <languageKey index="cz" type="array">
+        </languageKey>
+        <languageKey index="pl" type="array">
+        </languageKey>
+        <languageKey index="si" type="array">
+        </languageKey>
+        <languageKey index="fi" type="array">
+            <label index="title" type="integer">200168034</label>
+            <label index="function1" type="integer">176216594</label>
+            <label index="function2" type="integer">115749511</label>
+            <label index="function3" type="integer">67806393</label>
+            <label index="function4" type="integer">97004563</label>
+            <label index="function5" type="integer">21721615</label>
+            <label index="function6" type="integer">179231801</label>
+            <label index="function7" type="integer">205685812</label>
+            <label index="users" type="integer">163341762</label>
+            <label index="new" type="integer">36369989</label>
+            <label index="deleted" type="integer">228983536</label>
+            <label index="account" type="integer">237405251</label>
+            <label index="name" type="integer">184977713</label>
+            <label index="group" type="integer">72909580</label>
+            <label index="phone" type="integer">194754535</label>
+            <label index="email" type="integer">13123415</label>
+            <label index="ldap" type="integer">49285125</label>
+            <label index="no_servers" type="integer">13229180</label>
+        </languageKey>
+        <languageKey index="tr" type="array">
+        </languageKey>
+        <languageKey index="se" type="array">
+            <label index="title" type="integer">200168034</label>
+            <label index="function1" type="integer">176216594</label>
+            <label index="function2" type="integer">115749511</label>
+            <label index="function3" type="integer">67806393</label>
+            <label index="function4" type="integer">97004563</label>
+            <label index="function5" type="integer">21721615</label>
+            <label index="function6" type="integer">179231801</label>
+            <label index="function7" type="integer">205685812</label>
+            <label index="users" type="integer">163341762</label>
+            <label index="new" type="integer">36369989</label>
+            <label index="deleted" type="integer">228983536</label>
+            <label index="account" type="integer">237405251</label>
+            <label index="name" type="integer">184977713</label>
+            <label index="group" type="integer">72909580</label>
+            <label index="phone" type="integer">194754535</label>
+            <label index="email" type="integer">13123415</label>
+            <label index="ldap" type="integer">49285125</label>
+            <label index="no_servers" type="integer">13229180</label>
+        </languageKey>
+        <languageKey index="pt" type="array">
+        </languageKey>
+        <languageKey index="ru" type="array">
+        </languageKey>
+        <languageKey index="ro" type="array">
+        </languageKey>
+        <languageKey index="ch" type="array">
+        </languageKey>
+        <languageKey index="sk" type="array">
+        </languageKey>
+        <languageKey index="lt" type="array">
+        </languageKey>
+        <languageKey index="is" type="array">
+        </languageKey>
+        <languageKey index="hr" type="array">
+        </languageKey>
+        <languageKey index="hu" type="array">
+        </languageKey>
+        <languageKey index="gl" type="array">
+        </languageKey>
+        <languageKey index="th" type="array">
+        </languageKey>
+        <languageKey index="gr" type="array">
+        </languageKey>
+        <languageKey index="hk" type="array">
+        </languageKey>
+        <languageKey index="eu" type="array">
+        </languageKey>
+        <languageKey index="bg" type="array">
+        </languageKey>
+        <languageKey index="br" type="array">
+        </languageKey>
+        <languageKey index="et" type="array">
+        </languageKey>
+        <languageKey index="ar" type="array">
+        </languageKey>
+        <languageKey index="he" type="array">
+        </languageKey>
+        <languageKey index="ua" type="array">
+        </languageKey>
+        <languageKey index="lv" type="array">
+        </languageKey>
+        <languageKey index="jp" type="array">
+        </languageKey>
+    </orig_hash>
+    <orig_text type="array">
+        <languageKey index="default" type="array">
+        </languageKey>
+        <languageKey index="dk" type="array">
+        </languageKey>
+        <languageKey index="de" type="array">
+        </languageKey>
+        <languageKey index="no" type="array">
+        </languageKey>
+        <languageKey index="it" type="array">
+        </languageKey>
+        <languageKey index="fr" type="array">
+        </languageKey>
+        <languageKey index="es" type="array">
+        </languageKey>
+        <languageKey index="nl" type="array">
+        </languageKey>
+        <languageKey index="cz" type="array">
+        </languageKey>
+        <languageKey index="pl" type="array">
+        </languageKey>
+        <languageKey index="si" type="array">
+        </languageKey>
+        <languageKey index="fi" type="array">
+        </languageKey>
+        <languageKey index="tr" type="array">
+        </languageKey>
+        <languageKey index="se" type="array">
+        </languageKey>
+        <languageKey index="pt" type="array">
+        </languageKey>
+        <languageKey index="ru" type="array">
+        </languageKey>
+        <languageKey index="ro" type="array">
+        </languageKey>
+        <languageKey index="ch" type="array">
+        </languageKey>
+        <languageKey index="sk" type="array">
+        </languageKey>
+        <languageKey index="lt" type="array">
+        </languageKey>
+        <languageKey index="is" type="array">
+        </languageKey>
+        <languageKey index="hr" type="array">
+        </languageKey>
+        <languageKey index="hu" type="array">
+        </languageKey>
+        <languageKey index="gl" type="array">
+        </languageKey>
+        <languageKey index="th" type="array">
+        </languageKey>
+        <languageKey index="gr" type="array">
+        </languageKey>
+        <languageKey index="hk" type="array">
+        </languageKey>
+        <languageKey index="eu" type="array">
+        </languageKey>
+        <languageKey index="bg" type="array">
+        </languageKey>
+        <languageKey index="br" type="array">
+        </languageKey>
+        <languageKey index="et" type="array">
+        </languageKey>
+        <languageKey index="ar" type="array">
+        </languageKey>
+        <languageKey index="he" type="array">
+        </languageKey>
+        <languageKey index="ua" type="array">
+        </languageKey>
+        <languageKey index="lv" type="array">
+        </languageKey>
+        <languageKey index="jp" type="array">
+        </languageKey>
+    </orig_text>
+</T3locallang>

@@ -1,0 +1,527 @@
+a:2:{s:4:"meta";a:3:{s:5:"title";s:7:"eu_ldap";s:5:"descr";s:94:"Classes to identify, authetificate, import, update, delete FE and BE users and groups via ldap";s:7:"options";a:2:{s:10:"usageCount";s:1:"1";s:19:"includeCodeAbstract";s:1:"1";}}s:5:"files";a:5:{s:14:"MD5_b213d76777";a:5:{s:8:"filename";s:21:"class.ux_SC_index.php";s:8:"filesize";i:8621;s:6:"header";N;s:3:"DAT";a:3:{i:1;a:7:{s:6:"header";s:36:"class ux_SC_index extends SC_index {";s:5:"class";i:1;s:11:"parentClass";s:11:"ux_SC_index";s:7:"content";a:2:{i:0;s:1:"";i:1;i:-1;}s:12:"content_size";i:1;s:13:"content_lines";i:0;s:6:"atLine";i:0;}i:3;a:3:{s:6:"header";s:32:"function makeLoginLogoutForm()	{";s:11:"parentClass";s:11:"ux_SC_index";s:6:"atLine";i:2;}i:5;a:7:{s:6:"header";s:26:"function makeLoginForm()	{";s:11:"parentClass";s:11:"ux_SC_index";s:4:"cDat";a:3:{s:4:"text";s:25:"
+
+[Describe function...]
+";s:5:"param";a:0:{}s:6:"return";a:2:{i:0;s:6:"[type]";i:1;s:3:"...";}}s:7:"content";a:2:{i:0;s:507:"
+		$content.='
+		
+							<!-- 
+								Login form:
+							-->
+							<table cellspacing="0" cellpadding="0" border="0" id="logintable">
+									<tr>
+										<td colspan="2"><h2>'.htmlspecialchars($this->L_vars[6]).'</h2></td>
+									</tr>
+									<tr class="c-username">
+										<td><p class="c-username">'.htmlspecialchars($this->L_vars[0]).':</p></td>
+	
+[...]
+>L_vars[7]).'</p></td>
+									</tr>
+								</table>';
+										
+			// Return content:
+		return $content;
+	}	
+}
+?>";i:1;i:1;}s:12:"content_size";i:1662;s:13:"content_lines";i:39;s:6:"atLine";i:145;}}s:10:"usageCount";a:3:{s:12:"H_1f74f389fe";a:2:{s:24:"_searchtime_milliseconds";d:25;s:15:"_functionHeader";s:36:"class ux_SC_index extends SC_index {";}s:12:"H_aea4f7d8b1";a:2:{s:24:"_searchtime_milliseconds";d:5;s:15:"_functionHeader";s:32:"function makeLoginLogoutForm()	{";}s:12:"H_7a83bc4535";a:2:{s:24:"_searchtime_milliseconds";d:5;s:15:"_functionHeader";s:26:"function makeLoginForm()	{";}}}s:14:"MD5_c1f3fa23d1";a:5:{s:8:"filename";s:29:"class.ux_t3lib_beuserauth.php";s:8:"filesize";i:6957;s:6:"header";N;s:3:"DAT";a:2:{i:1;a:4:{s:6:"header";s:52:"class ux_t3lib_beuserauth extends t3lib_beUserAuth {";s:5:"class";i:1;s:11:"parentClass";s:19:"ux_t3lib_beuserauth";s:6:"atLine";i:0;}i:3;a:6:{s:6:"header";s:33:"function check_authentication() {";s:11:"parentClass";s:19:"ux_t3lib_beuserauth";s:7:"content";a:2:{i:0;s:507:"		// Checks if a submission of username and password is given
+		// eumedia: added $TYPO3_LOADED_EXT
+		global $HTTP_POST_VARS, $HTTP_GET_VARS, $TYPO3_LOADED_EXT;
+		
+		$this->tmp_formfield_uident = 'p_word';
+		
+		if ($this->getMethodEnabled)	{
+			$F_status = isset($HTTP_POST_VARS[$this->formfield_status]) ? $HTTP_POST_VARS[$this->formfield_status] : $HTTP_GET_VARS[$th
+[...]
+ay($this->user[username]));	// Logout written to log
+				$this->logoff();
+				return "logout";
+			break;
+		}
+	}
+}
+?>
+";i:1;i:1;}s:12:"content_size";i:6783;s:13:"content_lines";i:131;s:6:"atLine";i:4;}}s:10:"usageCount";a:2:{s:12:"H_b679060f8e";a:2:{s:24:"_searchtime_milliseconds";d:24;s:15:"_functionHeader";s:52:"class ux_t3lib_beuserauth extends t3lib_beUserAuth {";}s:12:"H_2ea133f2d7";a:2:{s:24:"_searchtime_milliseconds";d:4;s:15:"_functionHeader";s:33:"function check_authentication() {";}}}s:14:"MD5_630bfd71c3";a:5:{s:8:"filename";s:29:"class.ux_tslib_feuserauth.php";s:8:"filesize";i:7382;s:6:"header";N;s:3:"DAT";a:2:{i:1;a:4:{s:6:"header";s:52:"class ux_tslib_feuserauth extends tslib_feUserAuth {";s:5:"class";i:1;s:11:"parentClass";s:19:"ux_tslib_feuserauth";s:6:"atLine";i:0;}i:3;a:6:{s:6:"header";s:33:"function check_authentication() {";s:11:"parentClass";s:19:"ux_tslib_feuserauth";s:7:"content";a:2:{i:0;s:507:"		// Checks if a submission of username and password is given
+		// eumedia: added $TYPO3_LOADED_EXT
+		global $HTTP_POST_VARS, $HTTP_GET_VARS, $TYPO3_LOADED_EXT;
+		if ($this->getMethodEnabled)	{
+			$F_status = isset($HTTP_POST_VARS[$this->formfield_status]) ? $HTTP_POST_VARS[$this->formfield_status] : $HTTP_GET_VARS[$this->formfield_status];
+			$F_uname = isset($HTTP_P
+[...]
+ay($this->user[username]));	// Logout written to log
+				$this->logoff();
+				return "logout";
+			break;
+		}
+	}
+}
+?>
+";i:1;i:1;}s:12:"content_size";i:7253;s:13:"content_lines";i:148;s:6:"atLine";i:3;}}s:10:"usageCount";a:2:{s:12:"H_98d8e4a782";a:2:{s:24:"_searchtime_milliseconds";d:23;s:15:"_functionHeader";s:52:"class ux_tslib_feuserauth extends tslib_feUserAuth {";}s:12:"H_2ea133f2d7";a:2:{s:24:"_searchtime_milliseconds";d:4;s:15:"_functionHeader";s:33:"function check_authentication() {";}}}s:14:"MD5_86330de0d4";a:5:{s:8:"filename";s:28:"mod1/class.tx_euldap_div.php";s:8:"filesize";i:30867;s:6:"header";a:5:{s:4:"text";s:85:"
+
+Class for searching ldap-tree, import, update and authentificate
+users and groups.
+";s:5:"param";a:0:{}s:6:"return";a:2:{i:0;s:6:"[type]";i:1;s:3:"...";}s:5:"other";a:1:{i:0;s:49:"@author       Norman Seibert <seibert@eumedia.de>";}s:11:"other_index";a:1:{s:7:"@author";a:1:{i:0;s:35:"Norman Seibert <seibert@eumedia.de>";}}}s:3:"DAT";a:16:{i:1;a:8:{s:6:"header";s:21:"class tx_euldap_div {";s:5:"class";i:1;s:11:"parentClass";s:13:"tx_euldap_div";s:4:"cDat";a:5:{s:4:"text";s:85:"
+
+Class for searching ldap-tree, import, update and authentificate
+users and groups.
+";s:5:"param";a:0:{}s:6:"return";a:2:{i:0;s:6:"[type]";i:1;s:3:"...";}s:5:"other";a:1:{i:0;s:49:"@author       Norman Seibert <seibert@eumedia.de>";}s:11:"other_index";a:1:{s:7:"@author";a:1:{i:0;s:35:"Norman Seibert <seibert@eumedia.de>";}}}s:7:"content";a:2:{i:0;s:2:"
+	";i:1;i:-1;}s:12:"content_size";i:2;s:13:"content_lines";i:1;s:6:"atLine";i:39;}i:3;a:7:{s:6:"header";s:37:"function smart_utf8_decode($in_str) {";s:11:"parentClass";s:13:"tx_euldap_div";s:4:"cDat";a:3:{s:4:"text";s:40:"
+
+returns a given string utf8 - decoded
+";s:5:"param";a:1:{i:0;a:2:{i:0;s:6:"string";i:1;s:36:"$in_str: input string (utf8 encoded)";}}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:19:"utf8 decoded string";}}s:7:"content";a:2:{i:0;s:471:"		// Replace ? with a unique string
+		$new_str = str_replace('?', 'q0u0e0s0t0i0o0n', $in_str);
+		// Try the utf8_decode
+		$new_str = utf8_decode($in_str);
+		// if it contains ? marks
+		if (strpos($new_str,'?')>0) {
+			// Something went wrong, set new_str to the original string.
+			$new_str = $in_str;
+		} else {
+			// If not then all is well, put the ?-marks back where is belongs
+			$new_str = str_replace('q0u0e0s0t0i0o0n', '?', $new_str);
+		}
+		return $new_str;
+	}
+
+	";i:1;i:0;}s:12:"content_size";i:471;s:13:"content_lines";i:15;s:6:"atLine";i:47;}i:5;a:7:{s:6:"header";s:46:"function search_ldap($server_info,$findname) {";s:11:"parentClass";s:13:"tx_euldap_div";s:4:"cDat";a:3:{s:4:"text";s:66:"
+
+Gets object from ldap tree if the given findname can be found. 
+";s:5:"param";a:2:{i:0;a:2:{i:0;s:5:"array";i:1;s:73:"$server_info: containing all server information + filter to do the search";}i:1;a:2:{i:0;s:6:"string";i:1;s:31:"$findname: username to look for";}}s:6:"return";a:2:{i:0;s:5:"array";i:1;s:34:"all ldap entries for user or false";}}s:7:"content";a:2:{i:0;s:507:"		if ($findname) {
+			$server = $server_info['server'];
+			$port = $server_info['port'];
+			$version = $server_info['version'];
+			$auth_user = $server_info['user'];
+			$auth_pass = $server_info['password'];
+			$base_dn = $server_info['base_dn'];
+			$strfilter = $server_info['filter'];
+			$filter = str_replace('<search>', $findname, $strfilter);
+			if (!($connect=@ldap_con
+[...]
+) {
+			die('Unable to search ldap server'); 
+			}
+			$info = ldap_get_entries($connect, $search);
+			return $info;
+		}
+	}
+
+		";i:1;i:1;}s:12:"content_size";i:819;s:13:"content_lines";i:24;s:6:"atLine";i:70;}i:7;a:7:{s:6:"header";s:130:"function assign_groups($use_memberOf, $arrGroups, $ldapres, $ldapbuildgroup, &$gid, &$gname, 
+					$match, $addnewgroups,$table) {";s:11:"parentClass";s:13:"tx_euldap_div";s:4:"cDat";a:3:{s:4:"text";s:76:"
+
+assigns ldap and typo3 groups. LDAP groups can be imported if flag is set
+";s:5:"param";a:9:{i:0;a:2:{i:0;s:6:"string";i:1;s:41:"$use_memberOf: use the memberOf attribute";}i:1;a:2:{i:0;s:5:"array";i:1;s:43:"$arrGroups: array with typo3-groups (fe/be)";}i:2;a:2:{i:0;s:5:"array";i:1;s:36:"$ldapres: ldap attributes and values";}i:3;a:2:{i:0;s:6:"string";i:1;s:45:"$ldapbuildgroup: how to match the typo groups";}i:4;a:2:{i:0;s:6:"string";i:1;s:14:"$gid: groupids";}i:5;a:2:{i:0;s:6:"string";i:1;s:17:"$gname:groupnames";}i:6;a:2:{i:0;s:6:"string";i:1;s:52:"$match: import only groups begining with this string";}i:7;a:2:{i:0;s:6:"string";i:1;s:49:"$addnewgroups: if set groups are imported/created";}i:8;a:2:{i:0;s:6:"string";i:1;s:28:"$table: fe_users or be_users";}}s:6:"return";a:2:{i:0;s:4:"void";i:1;s:28:"- uses refvars gid and gname";}}s:7:"content";a:2:{i:0;s:507:"		if (''.$use_memberOf != '0') {
+			$k = 0;
+			$gid = '';
+			$department = '';
+			$gname = '';
+			while ($k < count($ldapres[$use_memberOf])) {
+				$department = strtolower($ldapres[$use_memberOf][$k]);
+				$equal = strpos($department, 'cn=');
+				$comma = strpos($department, ',', $equal);
+				$department = substr($department, $equal+3, $comma-$equal-3);
+				if ($departmen
+[...]
+rpname) {
+					if ($newgrpname != '') {
+						$gid.=','.$newgrpid;
+						$gname.=','.$newgrpname;
+					}
+				}
+			}
+		}
+	}
+
+	";i:1;i:1;}s:12:"content_size";i:3043;s:13:"content_lines";i:98;s:6:"atLine";i:109;}i:9;a:7:{s:6:"header";s:46:"function insert_newgrps($table,$grps,$match) {";s:11:"parentClass";s:13:"tx_euldap_div";s:4:"cDat";a:3:{s:4:"text";s:47:"
+ 
+Insert new groups into the table (fe or be)
+";s:5:"param";a:3:{i:0;a:2:{i:0;s:6:"string";i:1;s:29:"$table: be or fe groups table";}i:1;a:2:{i:0;s:5:"array";i:1;s:38:"$grps: groupnames of unmatched groupes";}i:2;a:2:{i:0;s:6:"string";i:1;s:55:"$match: matchstring; must match the beginning of string";}}s:6:"return";a:2:{i:0;s:5:"array";i:1;s:41:"key:groupId of new group, value=groupname";}}s:7:"content";a:2:{i:0;s:507:"		foreach ($grps as $grp) {
+			(substr($table,0,2) == 'be') ? $table='be_groups' : $table='fe_groups';
+			// build insert query
+			$qry='INSERT IGNORE INTO '.$table;
+			$eu_ldapSSO=unserialize($GLOBALS['TSFE']->TYPO3_CONF_VARS['EXT']['extConf']['eu_ldap']);
+			//if ($table=='fe_groups') {
+				$qry.='(pid,tstamp,title,description) VALUES
+					("'.$eu_ldapSSO['FE_UserStorage
+[...]
+e="'.$grp.'"');
+				$row=mysql_fetch_array($rslt2);
+				$return[$row['uid']]=$row['title'];
+			}
+		}
+		return $return;
+	}
+
+		";i:1;i:1;}s:12:"content_size";i:777;s:13:"content_lines";i:21;s:6:"atLine";i:217;}i:11;a:7:{s:6:"header";s:63:"function mysql_buffered_query($data_connection, $data_select) {";s:11:"parentClass";s:13:"tx_euldap_div";s:4:"cDat";a:3:{s:4:"text";s:41:"
+
+returns result form sql-query as array
+";s:5:"param";a:2:{i:0;a:2:{i:0;s:6:"string";i:1;s:34:"$data_connection: mysql-connection";}i:1;a:2:{i:0;s:6:"string";i:1;s:23:"$data_select: sql-query";}}s:6:"return";a:2:{i:0;s:5:"array";i:1;s:26:"resulting table from query";}}s:7:"content";a:2:{i:0;s:513:"		$sql_query      = mysql($data_connection, $data_select);
+		$sql_num_fields = mysql_num_fields($sql_query);
+		$info_rows = 0;
+		while($sql_fetch_rows = mysql_fetch_assoc($sql_query)) { 
+			$info_offset   = 1;
+			$info_columns  = 0;
+			while ($info_offset <= $sql_num_fields) {
+				$info_elements[$info_rows][mysql_field_name($sql_query, $info_columns)] = $sql_fetch_rows[mysql_field_name($sql_query, $info_columns)];
+				$info_offset++; $info_columns++;
+			}
+			$info_rows++;
+		}
+			return $info_elements;
+	}
+
+		";i:1;i:0;}s:12:"content_size";i:513;s:13:"content_lines";i:15;s:6:"atLine";i:246;}i:13;a:7:{s:6:"header";s:71:"function update_user($arrServers, $arrGroups, $username, $user_table) {";s:11:"parentClass";s:13:"tx_euldap_div";s:4:"cDat";a:3:{s:4:"text";s:54:"
+
+Updates typo3 users with data from ldap user object
+";s:5:"param";a:4:{i:0;a:2:{i:0;s:5:"array";i:1;s:52:"$arrServers: information about ldap servers to query";}i:1;a:2:{i:0;s:5:"array";i:1;s:41:"$arrGroups: existing typo3 groups (fe/be)";}i:2;a:2:{i:0;s:6:"string";i:1;s:37:"$username: username of user to update";}i:3;a:2:{i:0;s:6:"string";i:1;s:33:"$user_table: fe_users or be_users";}}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:75:"with information about updated user or FALSE if user does not exist in ldap";}}s:7:"content";a:2:{i:0;s:507:"		$i = 0;
+		$user_found = false;
+		while (($i < count($arrServers)) && !($user_found)) {
+			$ldapserver = $arrServers[$i]['server'];
+			$ldapname = $arrServers[$i]['name'];
+			$ldapmail = $arrServers[$i]['mail'];
+			$ldapphone = $arrServers[$i]['phone'];
+			$ldapfax = $arrServers[$i]['fax'];
+			$ldapaddress = $arrServers[$i]['address'];
+			$ldapzip = $arrServers[$i]['zip']
+[...]
+		$arrDisplay['ldapserver'] = $ldapserver;
+				return $arrDisplay;
+			}
+			$i++;
+		}
+		if (!$user_found) return false;
+	}
+
+		";i:1;i:1;}s:12:"content_size";i:3400;s:13:"content_lines";i:87;s:6:"atLine";i:271;}i:15;a:7:{s:6:"header";s:69:"function update_singleuser($Server, $arrGroups, $user, $user_table) {";s:11:"parentClass";s:13:"tx_euldap_div";s:4:"cDat";a:3:{s:4:"text";s:67:"
+
+updates single user (see above) 
+does not return anything at all
+";s:5:"param";a:4:{i:0;a:2:{i:0;s:5:"array";i:1;s:38:"$Server: row with ldap-server settings";}i:1;a:2:{i:0;s:5:"array";i:1;s:35:"$arrGroups: array of groups (fe/be)";}i:2;a:2:{i:0;s:5:"array";i:1;s:48:"$user: user to be updated (ldap attribute array)";}i:3;a:2:{i:0;s:6:"string";i:1;s:33:"$user_table: fe_users or be_users";}}s:6:"return";a:2:{i:0;s:4:"void";i:1;s:16:"nothing at all..";}}s:7:"content";a:2:{i:0;s:507:"		$ldapserver = $Server['server'];
+		$ldapname = $Server['name'];
+		$ldapmail = $Server['mail'];
+		$ldapphone = $Server['phone'];
+		$ldapfax = $Server['fax'];
+		$ldapaddress = $Server['address'];
+		$ldapzip = $Server['zip'];
+		$ldapcity = $Server['city'];
+		$ldapcountry = $Server['country'];
+		$ldapwww = $Server['www'];
+		$ldapbuildgroup = $Server['build_group'];
+		$use_me
+[...]
+_dkdfeuserbelogin_relatedbeuser = ".$row['uid']." WHERE username = '".$username."'";
+				mysql_query($query);
+			}
+		}
+	}
+
+		";i:1;i:1;}s:12:"content_size";i:2777;s:13:"content_lines";i:72;s:6:"atLine";i:369;}i:17;a:7:{s:6:"header";s:66:"function import_users($pid, $arrServer, $arrGroups, $user_table) {";s:11:"parentClass";s:13:"tx_euldap_div";s:4:"cDat";a:3:{s:4:"text";s:31:"
+
+imports users from ldap-tree
+";s:5:"param";a:4:{i:0;a:2:{i:0;s:7:"integer";i:1;s:38:"$pid: page id where userdata is stored";}i:1;a:2:{i:0;s:5:"array";i:1;s:41:"$arrServer: array with server information";}i:2;a:2:{i:0;s:5:"array";i:1;s:33:"$arrGroups: array of typo3 groups";}i:3;a:2:{i:0;s:6:"string";i:1;s:33:"$user_table: fe_users or be_users";}}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:25:"html content with results";}}s:7:"content";a:2:{i:0;s:507:"		$content = '';
+		$ldapserver = $arrServer['server'];
+		$ldapname = $arrServer['name'];
+		$ldapmail = $arrServer['mail'];
+		$ldapphone = $arrServer['phone'];
+		$ldapfax = $arrServer['fax'];
+		$ldapaddress = $arrServer['address'];
+		$ldapzip = $arrServer['zip'];
+		$ldapcity = $arrServer['city'];
+		$ldapcountry = $arrServer['country'];
+		$ldapwww = $arrServer['www'];
+		$lda
+[...]
+id']." WHERE username = '".$username."'";
+							mysql_query($query);
+						}
+					}
+				}
+			}
+		}
+		return $content;
+	}
+
+		";i:1;i:1;}s:12:"content_size";i:4369;s:13:"content_lines";i:120;s:6:"atLine";i:451;}i:19;a:7:{s:6:"header";s:75:"function import_singleuser($arrGroups, $user, $Server, $pid, $user_table) {";s:11:"parentClass";s:13:"tx_euldap_div";s:4:"cDat";a:3:{s:4:"text";s:89:"
+
+imports an single user into table. Needed for automtic import after successfull login 
+";s:5:"param";a:5:{i:0;a:2:{i:0;s:5:"array";i:1;s:23:"$arrGroups: typo groups";}i:1;a:2:{i:0;s:5:"array";i:1;s:26:"$user: uset to be inserted";}i:2;a:2:{i:0;s:5:"array";i:1;s:34:"$Server: server information (ldap)";}i:3;a:2:{i:0;s:7:"integer";i:1;s:30:"$pid: pid of user storage page";}i:4;a:2:{i:0;s:6:"string";i:1;s:33:"$user_table: fe_users or be_users";}}s:6:"return";a:2:{i:0;s:4:"void";i:1;s:14:"nothing at all";}}s:7:"content";a:2:{i:0;s:507:"		$OK = false;
+		$ldapname = $Server['name'];
+		$ldapmail = $Server['mail'];
+		$ldapphone = $Server['phone'];
+		$ldapfax = $Server['fax'];
+		$ldapaddress = $Server[0]['address'];
+		$ldapzip = $Server['zip'];
+		$ldapcity = $Server['city'];
+		$ldapcountry = $Server['country'];
+		$ldapwww = $Server['www'];
+		$use_feuser_belogin = $Server['use_feuser_belogin'];
+		$use_memberOf
+[...]
+
+				}
+			}
+		} else {
+			tx_euldap_div::update_singleuser($Server, $arrGroups, $user, $user_table);
+		}
+		return $OK;
+	}
+
+		";i:1;i:1;}s:12:"content_size";i:3771;s:13:"content_lines";i:98;s:6:"atLine";i:582;}i:21;a:7:{s:6:"header";s:54:"function delete_user($arrServers, $row, $user_table) {";s:11:"parentClass";s:13:"tx_euldap_div";s:4:"cDat";a:3:{s:4:"text";s:41:"
+
+deletes typo user if not found in ldap
+";s:5:"param";a:3:{i:0;a:2:{i:0;s:5:"array";i:1;s:46:"$arrServers: all ldap-server information (1-n)";}i:1;a:2:{i:0;s:5:"array";i:1;s:26:"$row: all user information";}i:2;a:2:{i:0;s:6:"string";i:1;s:33:"$user_table: fe_users or be_users";}}s:6:"return";a:2:{i:0;s:7:"boolean";i:1;s:28:"true if successfully deleted";}}s:7:"content";a:2:{i:0;s:593:"		$i = 0;
+		$user_found = false;
+		while (($i < count($arrServers)) && !($user_found)) {
+	       $ldapres = tx_euldap_div::search_ldap($arrServers[$i],$row['username']);
+	// HJM 2004-01-16: von == auf >= geändert, da es im NML-Tree mehrere Userobjecte gibt, die nicht anhand von
+	//			Suchkriterien unterschieden werden können
+
+		if ($ldapres['count'] >= 1) $user_found = true;
+			$i++;
+		}
+		if (!$user_found) {
+			$query = 'UPDATE '.$user_table.' SET deleted = 1 WHERE uid = '.$row['uid'].' AND deleted = 0';
+			mysql_query($query);
+			
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+		";i:1;i:0;}s:12:"content_size";i:593;s:13:"content_lines";i:20;s:6:"atLine";i:689;}i:23;a:7:{s:6:"header";s:57:"function checkNTUser ($server_info,$username,$password) {";s:11:"parentClass";s:13:"tx_euldap_div";s:4:"cDat";a:3:{s:4:"text";s:39:"
+
+checks username and password in ldap
+";s:5:"param";a:3:{i:0;a:2:{i:0;s:5:"array";i:1;s:76:"$server_info: all ldap-server configuration needed (see table eu_ldapserver)";}i:1;a:2:{i:0;s:6:"string";i:1;s:41:"$username: username to be checked in ldap";}i:2;a:2:{i:0;s:6:"string";i:1;s:33:"$password: password to be checked";}}s:6:"return";a:2:{i:0;s:5:"array";i:1;s:50:"ldap-user attributes, if found and authentificated";}}s:7:"content";a:2:{i:0;s:507:"		$server = $server_info['server'];
+		$ldapport = $server_info['port'];
+		$domain = $server_info['domain'];
+		$base_dn = $server_info['base_dn'];
+		$cuser = $server_info['user'];
+		$cpass = $server_info['password'];
+		$servertype = $server_info['servertype'];
+		$version = $server_info['version'];
+		
+		$strfilter = $server_info['filter'];
+		$filter = str_replace('<search>',
+[...]
+@ldap_search($ds, $base_dn, $filter);
+						$dn = @ldap_get_entries($ds, $dn);
+					}
+				return $dn[0];
+				}
+			}
+		}
+	}
+
+	";i:1;i:1;}s:12:"content_size";i:1263;s:13:"content_lines";i:49;s:6:"atLine";i:718;}i:25;a:7:{s:6:"header";s:26:"function getWinUser($ip) {";s:11:"parentClass";s:13:"tx_euldap_div";s:4:"cDat";a:3:{s:4:"text";s:50:"
+
+Get netbios Username (original script by polo )
+";s:5:"param";a:1:{i:0;a:2:{i:0;s:6:"string";i:1;s:17:"$ip: ip of client";}}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:21:"username, if possible";}}s:7:"content";a:2:{i:0;s:451:"		$fp = fsockopen('udp://'.$ip, 137);
+		fwrite($fp, "\x80b\0\0\0\1\0\0\0\0\0\0 CKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\0\0!\0\1");
+		/* wait 2 secs, and get the data */
+		socket_set_timeout($fp, 2);
+		$data = fread($fp, 256);
+		/* get netbios records number */
+		$nbrec = ord($data[56]);
+		for($i = 0; $i < $nbrec; $i++) {
+			$offset = 18 * $i;
+			(ord($data[72 + $offset])=="03") ? $user=trim(substr($data, 57 + $offset, 15)) : "";
+		}
+		return $user;
+	}
+
+	";i:1;i:0;}s:12:"content_size";i:451;s:13:"content_lines";i:14;s:6:"atLine";i:774;}i:27;a:7:{s:6:"header";s:50:"function getUserToWorkstation($server_info, $ip) {";s:11:"parentClass";s:13:"tx_euldap_div";s:4:"cDat";a:3:{s:4:"text";s:85:"
+
+parses through the ldap tree and tries to find matching Workstation and User on it
+";s:5:"param";a:2:{i:0;a:2:{i:0;s:5:"array";i:1;s:62:"$server_info: all necessary ldap stuff, like filters and so on";}i:1;a:2:{i:0;s:6:"string";i:1;s:39:"$ip ipaddress of the client to look for";}}s:6:"return";a:2:{i:0;s:5:"array";i:1;s:35:"if userobject can be found or false";}}s:7:"content";a:2:{i:0;s:507:"		$TimeStamp=$server_info['timestamp'];
+		$server_info['filter'] = $server_info['wsfilter'];
+		$ldapWSObj=tx_euldap_div::search_ldap($server_info,$ip);
+		($ldapWSObj['count']==1) ? $ws=$ldapWSObj[0]['dn'] : $ws=false;
+		if ($ws) {
+			$server_info['filter'] = $server_info['w2ufilter'];
+			$ldapUserObj=tx_euldap_div::search_ldap($server_info,$ws);
+			if ($ldapUserObj['count'
+[...]
+;
+					$i++;
+				}
+				return $ldapUserObj[$lastTS];
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	";i:1;i:1;}s:12:"content_size";i:747;s:13:"content_lines";i:23;s:6:"atLine";i:796;}i:29;a:4:{s:6:"header";s:25:"function ldap2time($TS) {";s:11:"parentClass";s:13:"tx_euldap_div";s:4:"cDat";a:3:{s:4:"text";s:66:"
+
+calcs unixtime from ldaptimestamp given (last char is ignored!)
+";s:5:"param";a:1:{i:0;a:2:{i:0;s:6:"string";i:1;s:19:"$TS: LDAP-Timestamp";}}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:14:"unix Timestamp";}}s:6:"atLine";i:826;}i:31;a:7:{s:6:"header";s:28:"function sso($server_info) {";s:11:"parentClass";s:13:"tx_euldap_div";s:4:"cDat";a:3:{s:4:"text";s:357:"
+
+main function to make an on campus single sign on with ldap and netbios check
+	- trying to find an matching workstation object in ldap tree [matched by WSfilter] by ip
+	- fetches all userObject in LDAP with matching Workstation dn as last login
+	- assumes that the user with latest login time is actually on
+	- checks if the user is still on with netbios
+";s:5:"param";a:1:{i:0;a:2:{i:0;s:5:"array";i:1;s:43:"$server_info: ldap-cofiguration (tx_euldap)";}}s:6:"return";a:2:{i:0;s:5:"array";i:1;s:45:"the ldap user object if user found or nothing";}}s:7:"content";a:2:{i:0;s:507:"		(isset($_SERVER["HTTP_X_FORWARDED_FOR"]))?$ip = $_SERVER["HTTP_X_FORWARDED_FOR"]:$ip = t3lib_div::getIndpEnv('REMOTE_ADDR');
+		$ip_long=ip2long($ip); 
+		$checkIPnet=true;
+		if (($server_info['sso_network']) && ($server_info['sso_mask'])) {
+			$network_long=ip2long($server_info['sso_network']); 
+			$mask_long=ip2long($server_info['sso_mask']);
+			$checkIPnet=false;
+		}
+		
+[...]
+er['cn'][0] ) == strtolower( tx_euldap_div::getWinUser($ip) ) )) {
+			return $user;
+		} else {
+			return false;
+		}
+	}	
+}
+?>
+";i:1;i:1;}s:12:"content_size";i:673;s:13:"content_lines";i:19;s:6:"atLine";i:845;}}s:10:"usageCount";a:16:{s:12:"H_e5bf6a5cb1";a:2:{s:24:"_searchtime_milliseconds";d:22;s:15:"_functionHeader";s:21:"class tx_euldap_div {";}s:12:"H_2edd2227f5";a:4:{s:3:"ALL";a:2:{s:14:"nonObjectUsage";i:16;s:5:"TOTAL";i:16;}s:14:"MD5_86330de0d4";a:3:{s:8:"fileName";s:28:"mod1/class.tx_euldap_div.php";s:14:"nonObjectUsage";i:16;s:5:"TOTAL";i:16;}s:24:"_searchtime_milliseconds";d:21;s:15:"_functionHeader";s:37:"function smart_utf8_decode($in_str) {";}s:12:"H_798cc856d4";a:5:{s:3:"ALL";a:2:{s:14:"nonObjectUsage";i:6;s:5:"TOTAL";i:6;}s:14:"MD5_86330de0d4";a:3:{s:8:"fileName";s:28:"mod1/class.tx_euldap_div.php";s:14:"nonObjectUsage";i:5;s:5:"TOTAL";i:5;}s:14:"MD5_19aaeae789";a:3:{s:8:"fileName";s:14:"mod1/index.php";s:14:"nonObjectUsage";i:1;s:5:"TOTAL";i:1;}s:24:"_searchtime_milliseconds";d:24;s:15:"_functionHeader";s:46:"function search_ldap($server_info,$findname) {";}s:12:"H_5153efedf3";a:4:{s:3:"ALL";a:2:{s:14:"nonObjectUsage";i:4;s:5:"TOTAL";i:4;}s:14:"MD5_86330de0d4";a:3:{s:8:"fileName";s:28:"mod1/class.tx_euldap_div.php";s:14:"nonObjectUsage";i:4;s:5:"TOTAL";i:4;}s:24:"_searchtime_milliseconds";d:18;s:15:"_functionHeader";s:130:"function assign_groups($use_memberOf, $arrGroups, $ldapres, $ldapbuildgroup, &$gid, &$gname, 
+					$match, $addnewgroups,$table) {";}s:12:"H_bcc60cd629";a:4:{s:3:"ALL";a:2:{s:14:"nonObjectUsage";i:1;s:5:"TOTAL";i:1;}s:14:"MD5_86330de0d4";a:3:{s:8:"fileName";s:28:"mod1/class.tx_euldap_div.php";s:14:"nonObjectUsage";i:1;s:5:"TOTAL";i:1;}s:24:"_searchtime_milliseconds";d:9;s:15:"_functionHeader";s:46:"function insert_newgrps($table,$grps,$match) {";}s:12:"H_7283f0f781";a:6:{s:3:"ALL";a:2:{s:14:"nonObjectUsage";i:7;s:5:"TOTAL";i:7;}s:14:"MD5_c1f3fa23d1";a:3:{s:8:"fileName";s:29:"class.ux_t3lib_beuserauth.php";s:14:"nonObjectUsage";i:1;s:5:"TOTAL";i:1;}s:14:"MD5_630bfd71c3";a:3:{s:8:"fileName";s:29:"class.ux_tslib_feuserauth.php";s:14:"nonObjectUsage";i:1;s:5:"TOTAL";i:1;}s:14:"MD5_19aaeae789";a:3:{s:8:"fileName";s:14:"mod1/index.php";s:14:"nonObjectUsage";i:5;s:5:"TOTAL";i:5;}s:24:"_searchtime_milliseconds";d:19;s:15:"_functionHeader";s:63:"function mysql_buffered_query($data_connection, $data_select) {";}s:12:"H_dbe858c29c";a:4:{s:3:"ALL";a:2:{s:14:"nonObjectUsage";i:1;s:5:"TOTAL";i:1;}s:14:"MD5_19aaeae789";a:3:{s:8:"fileName";s:14:"mod1/index.php";s:14:"nonObjectUsage";i:1;s:5:"TOTAL";i:1;}s:24:"_searchtime_milliseconds";d:10;s:15:"_functionHeader";s:71:"function update_user($arrServers, $arrGroups, $username, $user_table) {";}s:12:"H_a2890ab21b";a:4:{s:3:"ALL";a:2:{s:14:"nonObjectUsage";i:1;s:5:"TOTAL";i:1;}s:14:"MD5_86330de0d4";a:3:{s:8:"fileName";s:28:"mod1/class.tx_euldap_div.php";s:14:"nonObjectUsage";i:1;s:5:"TOTAL";i:1;}s:24:"_searchtime_milliseconds";d:20;s:15:"_functionHeader";s:69:"function update_singleuser($Server, $arrGroups, $user, $user_table) {";}s:12:"H_645de9e668";a:4:{s:3:"ALL";a:2:{s:14:"nonObjectUsage";i:1;s:5:"TOTAL";i:1;}s:14:"MD5_19aaeae789";a:3:{s:8:"fileName";s:14:"mod1/index.php";s:14:"nonObjectUsage";i:1;s:5:"TOTAL";i:1;}s:24:"_searchtime_milliseconds";d:11;s:15:"_functionHeader";s:66:"function import_users($pid, $arrServer, $arrGroups, $user_table) {";}s:12:"H_4df987d9da";a:5:{s:3:"ALL";a:2:{s:14:"nonObjectUsage";i:2;s:5:"TOTAL";i:2;}s:14:"MD5_c1f3fa23d1";a:3:{s:8:"fileName";s:29:"class.ux_t3lib_beuserauth.php";s:14:"nonObjectUsage";i:1;s:5:"TOTAL";i:1;}s:14:"MD5_630bfd71c3";a:3:{s:8:"fileName";s:29:"class.ux_tslib_feuserauth.php";s:14:"nonObjectUsage";i:1;s:5:"TOTAL";i:1;}s:24:"_searchtime_milliseconds";d:9;s:15:"_functionHeader";s:75:"function import_singleuser($arrGroups, $user, $Server, $pid, $user_table) {";}s:12:"H_24de13234b";a:4:{s:3:"ALL";a:2:{s:14:"nonObjectUsage";i:1;s:5:"TOTAL";i:1;}s:14:"MD5_19aaeae789";a:3:{s:8:"fileName";s:14:"mod1/index.php";s:14:"nonObjectUsage";i:1;s:5:"TOTAL";i:1;}s:24:"_searchtime_milliseconds";d:11;s:15:"_functionHeader";s:54:"function delete_user($arrServers, $row, $user_table) {";}s:12:"H_1ab402362e";a:5:{s:3:"ALL";a:2:{s:14:"nonObjectUsage";i:2;s:5:"TOTAL";i:2;}s:14:"MD5_c1f3fa23d1";a:3:{s:8:"fileName";s:29:"class.ux_t3lib_beuserauth.php";s:14:"nonObjectUsage";i:1;s:5:"TOTAL";i:1;}s:14:"MD5_630bfd71c3";a:3:{s:8:"fileName";s:29:"class.ux_tslib_feuserauth.php";s:14:"nonObjectUsage";i:1;s:5:"TOTAL";i:1;}s:24:"_searchtime_milliseconds";d:8;s:15:"_functionHeader";s:57:"function checkNTUser ($server_info,$username,$password) {";}s:12:"H_2473351447";a:4:{s:3:"ALL";a:2:{s:14:"nonObjectUsage";i:1;s:5:"TOTAL";i:1;}s:14:"MD5_86330de0d4";a:3:{s:8:"fileName";s:28:"mod1/class.tx_euldap_div.php";s:14:"nonObjectUsage";i:1;s:5:"TOTAL";i:1;}s:24:"_searchtime_milliseconds";d:21;s:15:"_functionHeader";s:26:"function getWinUser($ip) {";}s:12:"H_7373935086";a:4:{s:3:"ALL";a:2:{s:14:"nonObjectUsage";i:1;s:5:"TOTAL";i:1;}s:14:"MD5_86330de0d4";a:3:{s:8:"fileName";s:28:"mod1/class.tx_euldap_div.php";s:14:"nonObjectUsage";i:1;s:5:"TOTAL";i:1;}s:24:"_searchtime_milliseconds";d:26;s:15:"_functionHeader";s:50:"function getUserToWorkstation($server_info, $ip) {";}s:12:"H_1308e9b77f";a:4:{s:3:"ALL";a:2:{s:14:"nonObjectUsage";i:2;s:5:"TOTAL";i:2;}s:14:"MD5_86330de0d4";a:3:{s:8:"fileName";s:28:"mod1/class.tx_euldap_div.php";s:14:"nonObjectUsage";i:2;s:5:"TOTAL";i:2;}s:24:"_searchtime_milliseconds";d:19;s:15:"_functionHeader";s:25:"function ldap2time($TS) {";}s:12:"H_35f35edf74";a:4:{s:3:"ALL";a:2:{s:14:"nonObjectUsage";i:1;s:5:"TOTAL";i:1;}s:14:"MD5_630bfd71c3";a:3:{s:8:"fileName";s:29:"class.ux_tslib_feuserauth.php";s:14:"nonObjectUsage";i:1;s:5:"TOTAL";i:1;}s:24:"_searchtime_milliseconds";d:6;s:15:"_functionHeader";s:28:"function sso($server_info) {";}}}s:14:"MD5_19aaeae789";a:5:{s:8:"filename";s:14:"mod1/index.php";s:8:"filesize";i:12804;s:6:"header";a:5:{s:4:"text";s:57:"
+
+Module 'LDAP Integration' for the 'eu_ldap' extension.
+";s:5:"param";a:0:{}s:6:"return";a:2:{i:0;s:6:"[type]";i:1;s:3:"...";}s:5:"other";a:1:{i:0;s:46:"@author    Norman Seibert <seibert@eumedia.de>";}s:11:"other_index";a:1:{s:7:"@author";a:1:{i:0;s:35:"Norman Seibert <seibert@eumedia.de>";}}}s:3:"DAT";a:10:{i:1;a:7:{s:6:"header";s:46:"class tx_euldap_module1 extends t3lib_SCbase {";s:5:"class";i:1;s:11:"parentClass";s:17:"tx_euldap_module1";s:7:"content";a:2:{i:0;s:23:"		var $pageinfo;
+		 
+		";i:1;i:-1;}s:12:"content_size";i:23;s:13:"content_lines";i:2;s:6:"atLine";i:42;}i:3;a:7:{s:6:"header";s:17:"function init() {";s:11:"parentClass";s:17:"tx_euldap_module1";s:4:"cDat";a:3:{s:4:"text";s:1:"
+";s:5:"param";a:0:{}s:6:"return";a:2:{i:0;s:6:"[type]";i:1;s:3:"...";}}s:7:"content";a:2:{i:0;s:290:"			global $AB, $BE_USER, $LANG, $BACK_PATH, $TCA_DESCR, $TCA, $HTTP_GET_VARS, $HTTP_POST_VARS, $CLIENT, $TYPO3_CONF_VARS;
+			 
+			parent::init();
+			 
+			/*
+			if (t3lib_div::GPvar('clear_all_cache'))    {
+			$this->include_once[]=PATH_t3lib.'class.t3lib_tcemain.php';
+			}
+			*/
+		}
+		 
+		";i:1;i:0;}s:12:"content_size";i:290;s:13:"content_lines";i:11;s:6:"atLine";i:48;}i:5;a:7:{s:6:"header";s:23:"function menuConfig() {";s:11:"parentClass";s:17:"tx_euldap_module1";s:4:"cDat";a:3:{s:4:"text";s:74:"
+
+Adds items to the->MOD_MENU array. Used for the function menu selector.
+";s:5:"param";a:0:{}s:6:"return";a:2:{i:0;s:6:"[type]";i:1;s:3:"...";}}s:7:"content";a:2:{i:0;s:544:"			global $LANG;
+			$this->MOD_MENU = Array (
+			'function' => Array (
+			'1' => $LANG->getLL('function1'),
+				'2' => $LANG->getLL('function2'),
+				'3' => $LANG->getLL('function3'),
+				'4' => $LANG->getLL('function4'),
+				'5' => $LANG->getLL('function5'),
+				'6' => $LANG->getLL('function6'),
+				'7' => $LANG->getLL('function7'),
+				)
+			);
+			parent::menuConfig();
+		}
+		 
+		// If you chose "web" as main module, you will need to consider the $this->id parameter which will contain the uid-number of the page clicked in the page tree
+		";i:1;i:0;}s:12:"content_size";i:544;s:13:"content_lines";i:16;s:6:"atLine";i:65;}i:7;a:7:{s:6:"header";s:17:"function main() {";s:11:"parentClass";s:17:"tx_euldap_module1";s:4:"cDat";a:3:{s:4:"text";s:67:"
+
+Main function of the module. Write the content to $this->content
+";s:5:"param";a:0:{}s:6:"return";a:2:{i:0;s:6:"[type]";i:1;s:3:"...";}}s:7:"content";a:2:{i:0;s:459:"			global $AB, $BE_USER, $LANG, $BACK_PATH, $TCA_DESCR, $TCA, $HTTP_GET_VARS, $HTTP_POST_VARS, $CLIENT, $TYPO3_CONF_VARS;
+			 
+			// Access check!
+			// The page will show only if there is a valid page and if this page may be viewed by the user
+			$this->pageinfo = t3lib_BEfunc::readPageAccess($this->id, $this->perms_clause);
+			$access = is_array($this->pageinfo) ? 1 :
+			 0;
+			 
+			if (($this->id && $access) || ($BE_USER->user['admin'] && !$this->id)) ";i:1;i:0;}s:12:"content_size";i:459;s:13:"content_lines";i:8;s:6:"atLine";i:87;}i:9;a:6:{s:6:"header";s:28:"function jumpToUrl(URL)    {";s:11:"parentClass";s:17:"tx_euldap_module1";s:7:"content";a:2:{i:0;s:507:"					document.location = URL;
+					}
+					</script>
+					';
+				$this->doc->postCode = '
+					<script language="javascript">
+					script_ended = 1;
+					if (top.theMenu) top.theMenu.recentuid = '.intval($this->id).';
+					</script>
+					';
+				 
+				$headerSection = $this->doc->getHeader('pages', $this->pageinfo, $this->pageinfo['_thePath']).'<br>'.$LANG->php3Lang['labels'
+[...]
+->getLL('title'));
+				$this->content .= $this->doc->spacer(5);
+				$this->content .= $this->doc->spacer(10);
+			}
+		}
+		 
+		";i:1;i:1;}s:12:"content_size";i:1635;s:13:"content_lines";i:43;s:6:"atLine";i:107;}i:11;a:7:{s:6:"header";s:25:"function printContent() {";s:11:"parentClass";s:17:"tx_euldap_module1";s:4:"cDat";a:3:{s:4:"text";s:29:"
+
+Prints out the module HTML
+";s:5:"param";a:0:{}s:6:"return";a:2:{i:0;s:6:"[type]";i:1;s:3:"...";}}s:7:"content";a:2:{i:0;s:143:"			global $SOBE;
+			 
+			$this->content .= $this->doc->middle();
+			$this->content .= $this->doc->endPage();
+			echo $this->content;
+		}
+		 
+		";i:1;i:0;}s:12:"content_size";i:143;s:13:"content_lines";i:7;s:6:"atLine";i:156;}i:13;a:7:{s:6:"header";s:26:"function moduleContent() {";s:11:"parentClass";s:17:"tx_euldap_module1";s:4:"cDat";a:3:{s:4:"text";s:25:"
+
+[Describe function...]
+";s:5:"param";a:0:{}s:6:"return";a:2:{i:0;s:6:"[type]";i:1;s:3:"...";}}s:7:"content";a:2:{i:0;s:507:"			global $LANG;
+			//      debug($GLOBALS['HTTP_GET_VARS']);
+			//      debug($GLOBALS['HTTP_POST_VARS']);
+			if ($this->id) {
+				switch((string)$this->MOD_SETTINGS['function']) {
+					case 1: //summary
+					// Frontend-Users
+					$query = 'SELECT count(*) as count FROM fe_users WHERE NOT deleted AND pid = '.$this->id;
+					$res = mysql(TYPO3_db, $query);
+					$row = mys
+[...]
+users').":", $content, 0, 1);
+					break;
+				}
+			} else {
+				$this->content .= $LANG->getLL('no_servers');
+			}
+		}
+		 
+		";i:1;i:1;}s:12:"content_size";i:2620;s:13:"content_lines";i:58;s:6:"atLine";i:169;}i:15;a:7:{s:6:"header";s:49:"function index_update_users($user_prefix, $pid) {";s:11:"parentClass";s:17:"tx_euldap_module1";s:4:"cDat";a:3:{s:4:"text";s:25:"
+
+[Describe function...]
+";s:5:"param";a:2:{i:0;a:2:{i:0;s:6:"[type]";i:1;s:17:"$user_prefix: ...";}i:1;a:2:{i:0;s:6:"[type]";i:1;s:9:"$pid: ...";}}s:6:"return";a:2:{i:0;s:6:"[type]";i:1;s:3:"...";}}s:7:"content";a:2:{i:0;s:507:"			global $LANG;
+			$query = 'SELECT uid, title FROM '.$user_prefix.'_groups WHERE pid = '.$pid;
+			$arrGroups = tx_euldap_div::mysql_buffered_query(TYPO3_db, $query);
+			// load users
+			$query = 'SELECT * FROM '.$user_prefix.'_users WHERE NOT deleted AND pid = '.$pid;
+			$res = mysql(TYPO3_db, $query);
+			if (mysql_error()) debug(array(mysql_error(), $query));
+				// LDA
+[...]
+ nowrap>'.$arrDisplay['ldapserver'].'</td>
+						</tr>';
+				}
+			}
+			$content .= '</table>';
+			return $content;
+		}
+		 
+		";i:1;i:1;}s:12:"content_size";i:1602;s:13:"content_lines";i:44;s:6:"atLine";i:235;}i:17;a:4:{s:6:"header";s:49:"function index_import_users($user_prefix, $pid) {";s:11:"parentClass";s:17:"tx_euldap_module1";s:4:"cDat";a:3:{s:4:"text";s:25:"
+
+[Describe function...]
+";s:5:"param";a:2:{i:0;a:2:{i:0;s:6:"[type]";i:1;s:17:"$user_prefix: ...";}i:1;a:2:{i:0;s:6:"[type]";i:1;s:9:"$pid: ...";}}s:6:"return";a:2:{i:0;s:6:"[type]";i:1;s:3:"...";}}s:6:"atLine";i:287;}i:19;a:7:{s:6:"header";s:48:"function index_delete_users($user_table, $pid) {";s:11:"parentClass";s:17:"tx_euldap_module1";s:4:"cDat";a:3:{s:4:"text";s:25:"
+
+[Describe function...]
+";s:5:"param";a:2:{i:0;a:2:{i:0;s:6:"[type]";i:1;s:16:"$user_table: ...";}i:1;a:2:{i:0;s:6:"[type]";i:1;s:9:"$pid: ...";}}s:6:"return";a:2:{i:0;s:6:"[type]";i:1;s:3:"...";}}s:7:"content";a:2:{i:0;s:507:"			global $LANG;
+			// load users
+			$query = 'SELECT * FROM '.$user_table.' WHERE pid = '.$pid.' AND deleted = 0';
+			$res = mysql(TYPO3_db, $query);
+			if (mysql_error()) debug(array(mysql_error(), $query));
+				// LDAP
+			$query = sprintf('SELECT * FROM %s WHERE %s',
+				'tx_euldap_server',
+				($this->id?"pid IN (".$this->id.")":"") );
+			$arrServers = tx_euldap_div::m
+[...]
+t(, $INC_FILE) = each($SOBE->include_once)) {
+		include_once($INC_FILE);
+	}
+	 
+	$SOBE->main();
+	$SOBE->printContent();
+	 
+?>
+";i:1;i:1;}s:12:"content_size";i:1444;s:13:"content_lines";i:54;s:6:"atLine";i:326;}}s:10:"usageCount";a:10:{s:12:"H_17a030e4f4";a:4:{s:3:"ALL";a:2:{s:12:"makeinstance";i:1;s:5:"TOTAL";i:1;}s:14:"MD5_19aaeae789";a:3:{s:8:"fileName";s:14:"mod1/index.php";s:12:"makeinstance";i:1;s:5:"TOTAL";i:1;}s:24:"_searchtime_milliseconds";d:23;s:15:"_functionHeader";s:46:"class tx_euldap_module1 extends t3lib_SCbase {";}s:12:"H_5b5f9e0a98";a:4:{s:3:"ALL";a:3:{s:11:"objectUsage";i:1;s:5:"TOTAL";i:2;s:14:"nonObjectUsage";i:1;}s:14:"MD5_19aaeae789";a:4:{s:8:"fileName";s:14:"mod1/index.php";s:11:"objectUsage";i:1;s:5:"TOTAL";i:2;s:14:"nonObjectUsage";i:1;}s:24:"_searchtime_milliseconds";d:10;s:15:"_functionHeader";s:17:"function init() {";}s:12:"H_933202f641";a:4:{s:3:"ALL";a:2:{s:14:"nonObjectUsage";i:1;s:5:"TOTAL";i:1;}s:14:"MD5_19aaeae789";a:3:{s:8:"fileName";s:14:"mod1/index.php";s:14:"nonObjectUsage";i:1;s:5:"TOTAL";i:1;}s:24:"_searchtime_milliseconds";d:6;s:15:"_functionHeader";s:23:"function menuConfig() {";}s:12:"H_a212299ace";a:4:{s:3:"ALL";a:2:{s:11:"objectUsage";i:1;s:5:"TOTAL";i:1;}s:14:"MD5_19aaeae789";a:3:{s:8:"fileName";s:14:"mod1/index.php";s:11:"objectUsage";i:1;s:5:"TOTAL";i:1;}s:24:"_searchtime_milliseconds";d:10;s:15:"_functionHeader";s:17:"function main() {";}s:12:"H_8b5676bbcc";a:2:{s:24:"_searchtime_milliseconds";d:5;s:15:"_functionHeader";s:28:"function jumpToUrl(URL)    {";}s:12:"H_b675ce27fe";a:4:{s:3:"ALL";a:2:{s:11:"objectUsage";i:1;s:5:"TOTAL";i:1;}s:14:"MD5_19aaeae789";a:3:{s:8:"fileName";s:14:"mod1/index.php";s:11:"objectUsage";i:1;s:5:"TOTAL";i:1;}s:24:"_searchtime_milliseconds";d:12;s:15:"_functionHeader";s:25:"function printContent() {";}s:12:"H_ba89952816";a:4:{s:3:"ALL";a:2:{s:11:"objectUsage";i:1;s:5:"TOTAL";i:1;}s:14:"MD5_19aaeae789";a:3:{s:8:"fileName";s:14:"mod1/index.php";s:11:"objectUsage";i:1;s:5:"TOTAL";i:1;}s:24:"_searchtime_milliseconds";d:8;s:15:"_functionHeader";s:26:"function moduleContent() {";}s:12:"H_c27e975fd5";a:4:{s:3:"ALL";a:2:{s:11:"objectUsage";i:2;s:5:"TOTAL";i:2;}s:14:"MD5_19aaeae789";a:3:{s:8:"fileName";s:14:"mod1/index.php";s:11:"objectUsage";i:2;s:5:"TOTAL";i:2;}s:24:"_searchtime_milliseconds";d:10;s:15:"_functionHeader";s:49:"function index_update_users($user_prefix, $pid) {";}s:12:"H_7fe23facd6";a:4:{s:3:"ALL";a:2:{s:11:"objectUsage";i:2;s:5:"TOTAL";i:2;}s:14:"MD5_19aaeae789";a:3:{s:8:"fileName";s:14:"mod1/index.php";s:11:"objectUsage";i:2;s:5:"TOTAL";i:2;}s:24:"_searchtime_milliseconds";d:9;s:15:"_functionHeader";s:49:"function index_import_users($user_prefix, $pid) {";}s:12:"H_21570f5cc1";a:4:{s:3:"ALL";a:2:{s:11:"objectUsage";i:2;s:5:"TOTAL";i:2;}s:14:"MD5_19aaeae789";a:3:{s:8:"fileName";s:14:"mod1/index.php";s:11:"objectUsage";i:2;s:5:"TOTAL";i:2;}s:24:"_searchtime_milliseconds";d:10;s:15:"_functionHeader";s:48:"function index_delete_users($user_table, $pid) {";}}}}}

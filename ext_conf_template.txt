@@ -1,0 +1,12 @@
+# cat=basic/enable; type=boolean; label=Enable authentication against LDAP only. If checked, users not found in the directory may not log on.
+onlyLDAP = 0
+
+# cat=basic/enable; type=boolean; label=Backend: Enable LDAP authentification for the backend.
+enableBE = 0
+
+# cat=basic/enable; type=boolean; label=Frontend: Enable LDAP authentification for the frontend.
+enableFE = 0
+
+# cat=basic/enable; type=int+; label=Logging level (0 = none, 1 = normal, 2 = extensive).
+logLevel = 1
+

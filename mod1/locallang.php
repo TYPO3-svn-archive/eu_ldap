@@ -1,0 +1,218 @@
+<?php
+/**
+ * Language labels for module "web_txeuldapM1"
+ * 
+ * This file is detected by the translation tool.
+ */
+
+$LOCAL_LANG = Array (
+	'default' => Array (
+		'title' => 'LDAP Integration',
+		'function1' => 'summary',
+		'function2' => 'Frontend: refresh user data from directory',
+		'function3' => 'Frontend: import new users from directory',
+		'function4' => 'Frontend: delete users not in directory',
+		'function5' => 'Backend: refresh user data from directory',
+		'function6' => 'Backend: import new users from directory',
+		'function7' => 'Backend: delete users not in directory',
+		'users' => 'users',
+		'new' => 'new',
+		'deleted' => 'deleted',
+		'account' => 'account',
+		'name' => 'name',
+		'group' => 'usergroup',
+		'phone' => 'telephone',
+		'email' => 'email',
+		'ldap' => 'LDAP server',
+		'no_servers' => 'No LDAP servers defined.',
+		'submit' => 'START!',
+	),
+	'dk' => Array (
+	),
+	'de' => Array (
+		'title' => 'LDAP Integration',
+		'function1' => '&Uuml;bersicht',
+		'function2' => 'Frontend: Benutzerdaten aus dem Verzeichnis aktualisieren',
+		'function3' => 'Frontend: Neue Benutzer aus dem Verzeichnis importieren',
+		'function4' => 'Frontend: Benutzer ohne Verzeichniseintrag l&ouml;schen',
+		'function5' => 'Backend: Benutzerdaten aus dem Verzeichnis aktualisieren',
+		'function6' => 'Backend: Neue Benutzer aus dem Verzeichnis importieren',
+		'function7' => 'Backend: Benutzer ohne Verzeichniseintrag l&ouml;schen',
+		'users' => 'Benutzer',
+		'new' => 'neue',
+		'deleted' => 'geloeschte',
+		'account' => 'Account',
+		'name' => 'Name',
+		'group' => 'Gruppe',
+		'phone' => 'Telefon',
+		'email' => 'e-Mail',
+		'ldap' => 'LDAP-Server',
+		'no_servers' => 'Keine LDAP-Server angelegt.',
+		'submit' => 'START!',
+	),
+	'no' => Array (
+	),
+	'it' => Array (
+		'title' => 'Integrazione con LDAP',
+		'function1' => 'riassunto',
+		'function2' => 'Frontend: aggiorna i dati degli utenti dalla directory',
+		'function3' => 'Frontend: importa i nuovi utenti dalla directory',
+		'function4' => 'Frontend: elimina gli utenti non presenti nella directory',
+		'function5' => 'Backend: aggiorna i dati degli utenti dalla directory',
+		'function6' => 'Backend: importa i nuovi utenti dalla directory',
+		'function7' => 'Backend: elimina gli utenti non presenti nella directory',
+		'users' => 'utenti',
+		'new' => 'nuovo',
+		'deleted' => 'eliminati',
+		'account' => 'account',
+		'name' => 'nome',
+		'group' => 'gruppo',
+		'phone' => 'telefono',
+		'email' => 'email',
+		'ldap' => 'server LDAP',
+		'no_servers' => 'Non è stato definito nessun server LDAP',
+	),
+	'fr' => Array (
+	),
+	'es' => Array (
+	),
+	'nl' => Array (
+	),
+	'cz' => Array (
+	),
+	'pl' => Array (
+	),
+	'si' => Array (
+	),
+	'fi' => Array (
+		'title' => 'LDAP integrointi',
+		'function1' => 'yhteenveto',
+		'function2' => 'Frontend: virkistä käyttäjätiedot hakemistosta',
+		'function3' => 'Frontend: hae uudet käyttäjät hakemistosta',
+		'function4' => 'Frontend: poista käyttäjät jotka eivät ole hakemistossa',
+		'function5' => 'Frontend: virkistä käyttäjätiedot hakemistosta',
+		'function6' => 'Frontend: hae uudet käyttäjät hakemistosta',
+		'function7' => 'Frontend: poista käyttäjät jotka eivät ole hakemistossa',
+		'users' => 'käyttäjät',
+		'new' => 'uusi',
+		'deleted' => 'poistetut',
+		'account' => 'tili',
+		'name' => 'nimi',
+		'group' => 'käyttäjäryhmä',
+		'phone' => 'puhelin',
+		'email' => 'sähköpostiosoite',
+		'ldap' => 'LDAP palvelin',
+		'no_servers' => 'LDAP palvelinta ei määritetty',
+	),
+	'tr' => Array (
+	),
+	'se' => Array (
+		'title' => 'LDAP Integration',
+		'function1' => 'sammanfattning',
+		'function2' => 'Frontend: uppdatera användardata från katalogen',
+		'function3' => 'Frontend: importera nya användare från katalogen',
+		'function4' => 'Frontend:  ta bort användare som inte finns i katalogen',
+		'function5' => 'Backend: uppdatera användardata från katalogen',
+		'function6' => 'Backend: importera nya användare från katalogen',
+		'function7' => 'Backend: ta bort användare som inte finns i katalogen',
+		'users' => 'användare',
+		'new' => 'ny',
+		'deleted' => 'raderad',
+		'account' => 'konto',
+		'name' => 'namn',
+		'group' => 'användargrupp',
+		'phone' => 'telefon',
+		'email' => 'epost',
+		'ldap' => 'LDAP server',
+		'no_servers' => 'Ingen LDAP-server definierad',
+	),
+	'pt' => Array (
+	),
+	'ru' => Array (
+	),
+	'ro' => Array (
+	),
+	'ch' => Array (
+	),
+	'sk' => Array (
+	),
+	'lt' => Array (
+	),
+	'is' => Array (
+	),
+	'hr' => Array (
+	),
+	'hu' => Array (
+		'title' => 'LDAP integráció',
+		'function1' => 'összegzés',
+		'function2' => 'Frontend: felhasználói adatok frissítése könyvtárból',
+		'function3' => 'Frontend: új felhasználók importálása könyvtárból',
+		'function4' => 'Frontend: felhasználók törlése, akik nem szerepelnek a könyvtárban',
+		'function5' => 'Backend: felhasználók frissítése könyvtárból',
+		'function6' => 'Backend: új felhasználók importálása könyvtárból',
+		'function7' => 'Backend: felhasználók törlése, akik nem szerepelnek a könyvtárban',
+		'users' => 'felhasználók',
+		'new' => 'új',
+		'deleted' => 'törölve',
+		'account' => 'fiók',
+		'name' => 'név',
+		'group' => 'felhasználócsoport',
+		'phone' => 'telefon',
+		'email' => 'email',
+		'ldap' => 'LDAP szerver',
+		'no_servers' => 'Nincs LDAP szerver meghatározva',
+	),
+	'gl' => Array (
+	),
+	'th' => Array (
+	),
+	'gr' => Array (
+	),
+	'hk' => Array (
+	),
+	'eu' => Array (
+	),
+	'bg' => Array (
+	),
+	'br' => Array (
+		'title' => 'Integração LDAP',
+		'function1' => 'resumo',
+		'function2' => 'Site: atualizar dados do usuário a partir do diretório',
+		'function3' => 'Site: importar novos usuários a partir do diretório',
+		'function4' => 'Site: remover usuários que não estejam no diretório',
+		'function5' => 'Administração: atualizar dados do usuário a partir do diretório',
+		'function6' => 'Administração: importar novos usuários a partir do diretório',
+		'function7' => 'Administração: remover usuários que não estejam no diretório',
+		'users' => 'usuários',
+		'new' => 'novo',
+		'deleted' => 'removido',
+		'account' => 'conta',
+		'name' => 'nome',
+		'group' => 'grupo de usuário',
+		'phone' => 'telefone',
+		'email' => 'e-mail',
+		'ldap' => 'Servidor LDAP',
+		'no_servers' => 'Nenhum servidor LDAP foi definido',
+	),
+	'et' => Array (
+	),
+	'ar' => Array (
+	),
+	'he' => Array (
+	),
+	'ua' => Array (
+	),
+	'lv' => Array (
+	),
+	'jp' => Array (
+	),
+	'vn' => Array (
+	),
+	'ca' => Array (
+	),
+	'ba' => Array (
+	),
+	'kr' => Array (
+	),
+);
+?>
