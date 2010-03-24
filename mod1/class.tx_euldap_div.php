@@ -170,9 +170,8 @@ class tx_euldap_div {
                               ldap_sort($resource, $search, $sort_results[$i]);
 
             # Get the first entry identifier
-            if ($entry_id = ldap_first_entry($resource,$search)) {
-		
-		$dn = 0;
+            if ($entry_id = ldap_first_entry($resource, $search)) {
+            	  $dn = 0;
                   # Iterate over the entries
                   while ($entry_id) {
 
@@ -185,26 +184,19 @@ class tx_euldap_div {
 
                         # Get the attributes of the entry
                         $attrs = ldap_get_attributes($resource, $entry_id);
-
-                        # Get the first attribute of the entry
-                        if ($attr = ldap_first_attribute($resource, $entry_id, $attrs)) {
-
-                              # Iterate over the attributes
-                              while ($attr) {
-                                    $values = ldap_get_values($resource,$entry_id,$attr);
-
+                        
+                        # Iterate over the attributes
+                              while (list($attr, $values) = each($attrs)) { 
                                     # Get the number of values for this attribute
                                     $count = $values['count'];
-                                    unset($values['count']);
 
-                                    if ($count == 1)
+                                    if ($count == 1) {
                                           $return[$dn][strtolower($attr)] = $values[0];
-                                    else
+                              		} elseif ($count > 1) {
                                           $return[$dn][strtolower($attr)] = $values;
-
-                                    $attr = ldap_next_attribute($resource,$entry_id,$attrs);
+                              		}
+									
                               } # end while attr
-                        }
 
                         $entry_id = ldap_next_entry($resource,$entry_id);
                         
@@ -217,7 +209,6 @@ class tx_euldap_div {
                   ksort($return);
                   
             $return['count'] = $dn;
-                  
             return $return;
       }
 
@@ -609,8 +600,9 @@ class tx_euldap_div {
 		// preserve groups not imported by eu_ldap
 		$dbres = $GLOBALS['TYPO3_DB']->exec_SELECTquery ('uid', ($user_table=='fe_users'?'fe_groups':'be_groups'), 'eu_ldap = 0 AND uid IN (SELECT usergroup FROM '.$user_table." WHERE lower(username) = '".strtolower($GLOBALS['TYPO3_DB']->quoteStr($username,$user_table))."')");
 		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($dbres)) {
-			$gid .= ', '.$row['uid'];
+			$gid .= ','.$row['uid'];
 		}
+		$gid = implode(',', array_unique(explode(',', $gid)));
 		if ($user_table == 'fe_users') {
 			$map_additional_fields =
 				'address='.$ldapaddress
@@ -637,8 +629,8 @@ class tx_euldap_div {
 		$map_additional_fields_up = tx_euldap_div::additional_fields($map_additional_fields, $user);
 		if (is_array($map_additional_fields_up)) $updateArray = t3lib_div::array_merge($updateArray, $map_additional_fields_up);
 		
-		#$sql = $GLOBALS['TYPO3_DB']->UPDATEquery($user_table,"lower(username) = '".strtolower($GLOBALS['TYPO3_DB']->quoteStr($username,$user_table))."' AND pid=".$pid,$updateArray);
-		#echo $sql;
+		// $sql = $GLOBALS['TYPO3_DB']->UPDATEquery($user_table,"lower(username) = '".strtolower($GLOBALS['TYPO3_DB']->quoteStr($username,$user_table))."' AND pid=".$pid,$updateArray);
+		// debug($sql);
 		
 		$GLOBALS['TYPO3_DB']->exec_UPDATEquery($user_table,"lower(username) = '".strtolower($GLOBALS['TYPO3_DB']->quoteStr($username,$user_table))."' AND pid=".$pid,$updateArray);
 		
@@ -901,10 +893,9 @@ class tx_euldap_div {
 				$r = @ldap_bind($ds,$username,$password);
 				if ($r) {
 					if ($this->conf['logLevel'] == 2) t3lib_div::devLog('bind successful', 'eu_ldap', -1);
-					$dn = @ldap_search($ds, $base_dn, $filter);
-					$dn = @ldap_get_entries($ds, $dn);
 					
-					$user = $dn[0];
+					$arrUser = tx_euldap_div::search($ds, $base_dn, $filter, array(), 'sub', true, LDAP_DEREF_NEVER, 1);
+					$user = $arrUser[0];
 					
 					// convert character set remote -> local
 					if (is_array($user)) $user = tx_euldap_div::convertArray($user, $this->remoteChar, $this->localChar);

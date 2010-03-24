@@ -127,7 +127,7 @@ class tx_euldap_sv1 extends tx_sv_authbase {
 							"username = '".$this->login['uname']."'".$this->db_user['check_pid_clause'].$this->db_user['enable_clause']
 						);
 						$user = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($dbres);
-						// $user['authenticated'] = true;
+						$user['authenticated'] = true;
 					} else {
 						if ($this->conf['logLevel'] == 1) t3lib_div::devLog('Login failed', 'eu_ldap', 2);
 					}
