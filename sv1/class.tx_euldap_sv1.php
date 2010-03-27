@@ -51,29 +51,34 @@ class tx_euldap_sv1 extends tx_sv_authbase {
 		return parent::init();
 	}
 	
+	function initAuth($subType, array $loginData, array $authenticationInformation, t3lib_userAuth &$parentObject) {
+		$this->loginData = $loginData;
+		$this->authInfo = $authenticationInformation;
+		$this->password = $this->loginData['uident_text'];
+		$this->username = $this->loginData['uname'];
+		
+	}
+	
 	function getUser()	{
 		$OK = false;
 		$user = null;
 		// $user['authenticated'] = false;
 		if ($this->conf['logLevel'] > 0) t3lib_div::devLog('getUser() called', 'eu_ldap', 0);
-		if(!$this->info['userSession']['uid']) {
+		if ($this->loginData['status'] == 'login') {
 			if ($this->conf['logLevel'] > 1) t3lib_div::devLog('no session found', 'eu_ldap', 0);
-			if ($this->login['uname'])	{
-				if ($this->conf['logLevel'] == 1) t3lib_div::devLog('user name: '.$this->login['uname'], 'eu_ldap', 0);
-				if ($this->conf['logLevel'] == 2) t3lib_div::devLog('user name / password: '.$this->login['uname'].' / '.$this->login['uident'], 'eu_ldap', 0);
-				//$user['username'] = $this->login['uname'];
-				//$user['password'] = $this->login['uident'];
-				$password = $this->login['uident_text'];
+			if ($this->username)	{
+				if ($this->conf['logLevel'] == 1) t3lib_div::devLog('user name: '.$this->username, 'eu_ldap', 0);
+				if ($this->conf['logLevel'] == 2) t3lib_div::devLog('user name / password: '.$this->username.' / '.$this->password, 'eu_ldap', 0);
 				
-				if ($this->db_groups['table'] == 'be_groups') {
+				if ($this->authInfo['loginType'] == 'BE') {
 					$whereclause = 'deleted = 0 AND hidden = 0';
 				} else {
-					$whereclause = 'deleted = 0 AND hidden = 0 AND pid = '.$this->db_user['checkPidList'];
+					$whereclause = 'deleted = 0 AND hidden = 0 AND pid = '.$this->authInfo['db_user']['checkPidList'];
 				}
 				
 				$dbres = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 					'uid, title',
-					$this->db_groups['table'],
+					$this->authInfo['db_groups']['table'],
 					$whereclause
 				);
 				
@@ -84,7 +89,7 @@ class tx_euldap_sv1 extends tx_sv_authbase {
 				$dbres = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 						'*',
 						'tx_euldap_server',
-						($this->db_user['table'] == 'be_users'?'authenticate_be IN (1,2) ':'authenticate_be IN (0,2) '.$this->db_user['check_pid_clause']),
+						($this->authInfo['loginType'] == 'BE'?'authenticate_be IN (1,2) ':'authenticate_be IN (0,2) '.$this->authInfo['db_user']['check_pid_clause']),
 						'',
 						'sorting'
 				);
@@ -93,7 +98,7 @@ class tx_euldap_sv1 extends tx_sv_authbase {
 					$sql = $GLOBALS['TYPO3_DB']->SELECTquery(
 						'*',
 						'tx_euldap_server',
-						($this->db_user['table'] == 'be_users'?'authenticate_be IN (1,2) ':'authenticate_be IN (0,2) '.$this->db_user['check_pid_clause']),
+						($this->authInfo['loginType'] == 'BE'?'authenticate_be IN (1,2) ':'authenticate_be IN (0,2) '.$this->authInfo['db_user']['check_pid_clause']),
 						'',
 						'sorting'
 					);
@@ -102,29 +107,31 @@ class tx_euldap_sv1 extends tx_sv_authbase {
 				
 				$objLdap = new tx_euldap_div;
 				
-				//debug($this->login['uname']);
-				//debug($password);
-				
 				while (($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($dbres)) && !($OK)) {
 					if ($this->conf['logLevel'] == 1) t3lib_div::devLog('checking server: '.$row['server'], 'eu_ldap', 0);
-					$ldapres = $objLdap->checkNTUser($row,$this->login['uname'],$password);
+					$ldapres = $objLdap->checkNTUser($row, $this->username, $this->password);
 					if (is_array($ldapres)) {
 						if ($this->conf['logLevel'] >= 1) t3lib_div::devLog('Login successful', 'eu_ldap', -1);
-						if ($this->db_user['check_pid_clause']) {
-							$pid = $this->db_user['checkPidList'];
+						if ($this->authInfo['db_user']['check_pid_clause']) {
+							$pid = $this->authInfo['db_user']['checkPidList'];
 						} else {
 							$pid = '';
 						}
 						if ($row['automatic_import']) {
-							if ($this->conf['logLevel'] >= 1) t3lib_div::devLog('Importing user '.$this->login['uname'], 'eu_ldap', 0);
-							$objLdap->import_singleuser($arrGroups, $ldapres, $row, $pid, $this->db_user['table']);
+							if ($this->conf['logLevel'] >= 1) t3lib_div::devLog('Importing user '.$this->username, 'eu_ldap', 0);
+							$objLdap->import_singleuser($arrGroups, $ldapres, $row, $pid, $this->authInfo['db_user']['table']);
 						}
 						$OK = true;
 						$loginFailure = false;
 						$dbres = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 							'*',
-							$this->db_user['table'],
-							"username = '".$this->login['uname']."'".$this->db_user['check_pid_clause'].$this->db_user['enable_clause']
+							$this->authInfo['db_user']['table'],
+							"username = '".$this->username."'".$this->authInfo['db_user']['check_pid_clause'].$this->authInfo['db_user']['enable_clause']
+						);
+						$sql = $GLOBALS['TYPO3_DB']->SELECTquery(
+							'*',
+							$this->authInfo['db_user']['table'],
+							"username = '".$this->username."'".$this->authInfo['db_user']['check_pid_clause'].$this->authInfo['db_user']['enable_clause']
 						);
 						$user = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($dbres);
 						$user['authenticated'] = true;
@@ -136,7 +143,7 @@ class tx_euldap_sv1 extends tx_sv_authbase {
 		}
 		return $user;
 	}
-
+	
 	/**
 	 * authenticate a user
 	 *
@@ -145,10 +152,11 @@ class tx_euldap_sv1 extends tx_sv_authbase {
 	 */
 function authUser(&$user)	{
 	global $TYPO3_CONF_VARS;
-	$OK = 100;
-	$this->pObj->challengeStoredInCookie = false;
 	
-	if ($this->login['uname'])	{
+	$OK = 100;
+	
+	// $this->pObj->challengeStoredInCookie = false;
+	if ($this->username)	{
 		$OK = 0;
 
 		$OK = $user['authenticated'];
@@ -158,13 +166,29 @@ function authUser(&$user)	{
 			if ($this->writeAttemptLog) {
 				$this->writelog(255,3,3,1,
 					"Login-attempt from %s (%s), username '%s', password not accepted!",
-					array($this->info['REMOTE_ADDR'], $this->info['REMOTE_HOST'], $this->login['uname']));
+					array($this->info['REMOTE_ADDR'], $this->info['REMOTE_HOST'], $this->username));
 			}
-			if ($this->conf['logLevel'] == 1) t3lib_div::devLog('Password not accepted: '.$password, 'eu_ldap', 2);
+			if ($this->conf['logLevel'] == 1) t3lib_div::devLog('Password not accepted: '.$this->password, 'eu_ldap', 2);
 		}
 		
 		$OK = $OK ? 200 : ($this->conf['onlyLDAP'] ? 0 : 100);
 	}
+	
+	if ($OK && $user['lockToDomain'] && $user['lockToDomain']!=$this->authInfo['HTTP_HOST'])	{
+		// Lock domain didn't match, so error:
+		if ($this->writeAttemptLog) {
+			$this->writelog(255,3,3,1,
+				"Login-attempt from %s (%s), username '%s', locked domain '%s' did not match '%s'!",
+				Array($this->authInfo['REMOTE_ADDR'], $this->authInfo['REMOTE_HOST'], $user[$this->authInfo['db_user']['username_column']], $user['lockToDomain'], $this->authInfo['HTTP_HOST']));
+			t3lib_div::sysLog(
+				sprintf( "Login-attempt from %s (%s), username '%s', locked domain '%s' did not match '%s'!", $this->authInfo['REMOTE_ADDR'], $this->authInfo['REMOTE_HOST'], $user[$this->authInfo['db_user']['username_column']], $user['lockToDomain'], $this->authInfo['HTTP_HOST'] ),
+				'Core',
+				0
+			);
+		}
+		$OK = false;
+	}
+	
 	return $OK;
 }
 

@@ -855,7 +855,6 @@ class tx_euldap_div {
 		$cpass = $server_info['password'];
 		$servertype = $server_info['servertype'];
 		$version = $server_info['version'];
-
 		$strfilter = $server_info['filter'];
 		$filter = str_replace('<search>', $username, $strfilter);
 
