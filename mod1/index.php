@@ -43,6 +43,7 @@
 	 
 	class tx_euldap_module1 extends t3lib_SCbase {
 		var $pageinfo;
+		var $tx_euldap_div;
 		 
 		/**
  * @return	[type]		...
@@ -88,12 +89,13 @@
  */
 		function main() {
 			global $AB, $BE_USER, $LANG, $BACK_PATH, $TCA_DESCR, $TCA, $HTTP_GET_VARS, $HTTP_POST_VARS, $CLIENT, $TYPO3_CONF_VARS;
+			
+			$this->tx_euldap_div = t3lib_div::makeInstance('tx_euldap_div');
 			 
 			// Access check!
 			// The page will show only if there is a valid page and if this page may be viewed by the user
 			$this->pageinfo = t3lib_BEfunc::readPageAccess($this->id, $this->perms_clause);
-			$access = is_array($this->pageinfo) ? 1 :
-			 0;
+			$access = is_array($this->pageinfo) ? 1 : 0;
 			 
 			// if (($this->id && $access) || ($BE_USER->user['admin'] && !$this->id)) {
 			if (($this->id && $access) || ($BE_USER->user["admin"] && !$this->id) || ($BE_USER->user["uid"] && !$this->id))  {
@@ -119,7 +121,7 @@
 					</script>
 					';
 				 
-				$headerSection = $this->doc->getHeader('pages', $this->pageinfo, $this->pageinfo['_thePath']).'<br>'.$LANG->php3Lang['labels']['path'].': '.t3lib_div::fixed_lgd($this->pageinfo['_thePath'], 50);
+				$headerSection = $this->doc->getHeader('pages', $this->pageinfo, $this->pageinfo['_thePath']).'<br>'.$LANG->php3Lang['labels']['path'].': '.t3lib_div::fixed_lgd_cs($this->pageinfo['_thePath'], 50);
 				 
 				$this->content .= $this->doc->startPage($LANG->getLL('title'));
 				$this->content .= $this->doc->header($LANG->getLL('title'));
@@ -174,7 +176,7 @@
 			//      debug($GLOBALS['HTTP_GET_VARS']);
 			//      debug($GLOBALS['HTTP_POST_VARS']);
 			
-			tx_euldap_div::initChar('');
+			$this->tx_euldap_div->initChar('');
 			
 			$doCommand = false;
 			
@@ -188,70 +190,80 @@
 				if ($HTTP_POST_VARS['submit']) {
 					$doCommand = true;
 				} else {
-					$this->content .= '<input type="submit" name="submit" value="'.$LANG->getLL('submit').'" />';
+					switch((string)$this->MOD_SETTINGS['function']) {
+						case 2:
+						case 3:
+						case 5:
+						case 6:
+							$this->content .= '<br/><p><input type="checkbox" name="import_groups" value="1" checked /> '.$LANG->getLL('import_groups').'</p><br/>';
+							break;
+					}
+					$this->content .= '<p><input type="submit" name="submit" value="'.$LANG->getLL('submit').'" /></p>';
 				}
 			} else {
 				$this->content .= $LANG->getLL('no_servers');
 			}
 			
 			if ($doCommand && $this->id) {
+				$importGroups = 0;
+				if ($HTTP_POST_VARS['import_groups'] == '1') $importGroups = 1;
 				switch((string)$this->MOD_SETTINGS['function']) {
 					case 1: //summary
-					// Frontend-Users
-					$dbres = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-						'count(*)',
-						'fe_users',
-						'NOT deleted AND pid = '.$this->id
-					);
-					if ($dbres) $row = $GLOBALS['TYPO3_DB']->sql_fetch_row($dbres);
-					$content = '<div>'.$row[0].' '.$LANG->getLL('users').'</div>';
-					$this->content .= $this->doc->section('Frontend:', $content, 0, 1);
-					// Backend-Users
-					$dbres = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-						'count(*)',
-						'be_users',
-						'NOT deleted'
-					);
-					if ($dbres) $row = $GLOBALS['TYPO3_DB']->sql_fetch_row($dbres);
-					$content = '<div>'.$row[0].' '.$LANG->getLL('users').'</div>';
-					$this->content .= $this->doc->section('Backend:', $content, 0, 1);
-					// LDAP
-					$dbres = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-						'*',
-						'tx_euldap_server',
-						'pid IN ('.$this->id.')'
-					);
-					while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($dbres)) {
-						$ldapserver = $row['server'];
-						$ldapres = tx_euldap_div::search_ldap($row, '*');
-						$content = '<div>'.$ldapres['count'].' '.$LANG->getLL('users').'</div>';
-						$this->content .= $this->doc->section($ldapserver.":", $content, 0, 1);
-					}
-					break;
+						// Frontend-Users
+						$dbres = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+							'count(*)',
+							'fe_users',
+							'NOT deleted AND pid = '.$this->id
+						);
+						if ($dbres) $row = $GLOBALS['TYPO3_DB']->sql_fetch_row($dbres);
+						$content = '<div>'.$row[0].' '.$LANG->getLL('users').'</div>';
+						$this->content .= $this->doc->section('Frontend:', $content, 0, 1);
+						// Backend-Users
+						$dbres = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+							'count(*)',
+							'be_users',
+							'NOT deleted'
+						);
+						if ($dbres) $row = $GLOBALS['TYPO3_DB']->sql_fetch_row($dbres);
+						$content = '<div>'.$row[0].' '.$LANG->getLL('users').'</div>';
+						$this->content .= $this->doc->section('Backend:', $content, 0, 1);
+						// LDAP
+						$dbres = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+							'*',
+							'tx_euldap_server',
+							'pid IN ('.$this->id.')'
+						);
+						while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($dbres)) {
+							$ldapserver = $row['server'];
+							$ldapres = $this->tx_euldap_div->search_ldap($row, '*');
+							$content = '<div>'.$ldapres['count'].' '.$LANG->getLL('users').'</div>';
+							$this->content .= $this->doc->section($ldapserver.":", $content, 0, 1);
+						}
+						break;
 					case 2: //update FE-users
-					$content = $this->index_update_users('fe', $this->id);
-					$this->content .= $this->doc->section($LANG->getLL('users').":", $content, 0, 1);
-					break;
+						$content = $this->index_update_users('fe', $this->id, $importGroups);
+						$this->content .= $this->doc->section($LANG->getLL('users').":", $content, 0, 1);
+						break;
 					case 5: //update BE-users
-					$content = $this->index_update_users('be', 0, $this->id);
-					$this->content .= $this->doc->section($LANG->getLL('users').":", $content, 0, 1);
-					break;
+						$content = $this->index_update_users('be', 0, $importGroups);
+						$this->content .= $this->doc->section($LANG->getLL('users').":", $content, 0, 1);
+						break;
 					case 3: //import FE-users
-					$content = $this->index_import_users('fe', $this->id);
-					$this->content .= $this->doc->section($LANG->getLL('new').' '.$LANG->getLL('users').":", $content, 0, 1);
-					break;
+						$content = $this->index_import_users('fe', $this->id, $importGroups);
+						$this->content .= $this->doc->section($LANG->getLL('new').' '.$LANG->getLL('users').":", $content, 0, 1);
+						break;
 					case 6: //import BE-users
-					$content = $this->index_import_users('be', 0);
-					$this->content .= $this->doc->section($LANG->getLL('new').' '.$LANG->getLL('users').":", $content, 0, 1);
-					break;
+						$content = $this->index_import_users('be', 0, $importGroups);
+						$this->content .= $this->doc->section($LANG->getLL('new').' '.$LANG->getLL('users').":", $content, 0, 1);
+						break;
 					case 4: //delete FE-users
-					$content = $this->index_delete_users('fe_users', $this->id);
-					$this->content .= $this->doc->section($LANG->getLL('deleted').' '.$LANG->getLL('users').":", $content, 0, 1);
-					break;
+						$content = $this->index_delete_users('fe_users', $this->id);
+						$this->content .= $this->doc->section($LANG->getLL('deleted').' '.$LANG->getLL('users').":", $content, 0, 1);
+						break;
 					case 7: //delete BE-users
-					$content = $this->index_delete_users('be_users', 0);
-					$this->content .= $this->doc->section($LANG->getLL('deleted').' '.$LANG->getLL('users').":", $content, 0, 1);
-					break;
+						$content = $this->index_delete_users('be_users', 0);
+						$this->content .= $this->doc->section($LANG->getLL('deleted').' '.$LANG->getLL('users').":", $content, 0, 1);
+						break;
 				}
 			}
 		}
@@ -263,10 +275,11 @@
  * @param	[type]		$pid: ...
  * @return	[type]		...
  */
-		function index_update_users($user_prefix, $pid) {
+		function index_update_users($user_prefix, $pid, $importGroups) {
 			global $LANG;
 			
-			tx_euldap_div::initChar('');
+			$this->tx_euldap_div->initChar('');
+			$this->tx_euldap_div->importGroups = $importGroups;
 			
 			$dbres = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'uid, title',
@@ -308,7 +321,7 @@
 				</tr>';
 			$i = 0;
 			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-				$arrDisplay = tx_euldap_div::update_user($arrServers, $arrGroups, $row['username'], $user_prefix.'_users', $this->id);
+				$arrDisplay = $this->tx_euldap_div->update_user($arrServers, $arrGroups, $row['username'], $user_prefix.'_users', $this->id);
 				if ($arrDisplay && ($i < 10)) {
 					$i++;
 					$content .= '<tr>
@@ -335,10 +348,10 @@
  * @param	[type]		$pid: ...
  * @return	[type]		...
  */
-		function index_import_users($user_prefix, $pid) {
+		function index_import_users($user_prefix, $pid, $import_groups) {
 			global $LANG;
 			
-			tx_euldap_div::initChar('');
+			$this->tx_euldap_div->initChar('');
 			
 			srand((double)microtime() * 1000000);
 			//load groups
@@ -374,7 +387,7 @@
 				</tr>';
 			$i = 0;
 			while ($i < count($arrServers)) {
-				$content .= tx_euldap_div::import_users($pid, $arrServers[$i], $arrGroups, $user_prefix.'_users');
+				$content .= $this->tx_euldap_div->import_users($pid, $arrServers[$i], $arrGroups, $user_prefix.'_users');
 				$i++;
 			}
 			$content .= '</table>';
@@ -391,7 +404,7 @@
 		function index_delete_users($user_table, $pid) {
 			global $LANG;
 			
-			tx_euldap_div::initChar('');
+			$this->tx_euldap_div->initChar('');
 			
 			// load users
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
@@ -416,7 +429,7 @@
 				<td><b>'.$LANG->getLL('email').'</b></td>
 				</tr>';
 			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-				$display = tx_euldap_div::delete_user($arrServers, $row, $user_table);
+				$display = $this->tx_euldap_div->delete_user($arrServers, $row, $user_table);
 				if ($display) {
 					$content .= '<tr>
 						<td nowrap>'.$row['username'].'</td>

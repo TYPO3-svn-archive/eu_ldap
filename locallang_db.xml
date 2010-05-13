@@ -110,7 +110,7 @@
             <label index="tx_euldap_server.authenticate_be.I.0">Frontend only</label>
             <label index="tx_euldap_server.authenticate_be.I.1">Backend only</label>
             <label index="tx_euldap_server.authenticate_be.I.2">Frontend and Backend</label>
-            <label index="tx_euldap_server.doitfe">Import groups from LDAP</label>
+            <label index="tx_euldap_server.doitfe">Import new groups from LDAP</label>
             <label index="tx_euldap_server.matchgrps">Import only users wich are in the following groups (comma separated, * allowed)</label>
             <label index="tx_euldap_server.sso_network">Network for Single Sign On</label>
             <label index="tx_euldap_server.sso_mask">Networkmask for Single Sign On</label>
@@ -175,7 +175,7 @@
             <label index="tx_euldap_server.country">Welches LDAP-Attribut entspricht dem Land?</label>
             <label index="tx_euldap_server.www">Welches LDAP-Attribut entspricht der Website?</label>
             <label index="tx_euldap_server.authenticate_be">auch BE Benutzer über diesen Server authentifizieren</label>
-            <label index="tx_euldap_server.doitfe">Gruppen aus LDAP importieren</label>
+            <label index="tx_euldap_server.doitfe">Zusätzliche Gruppen aus LDAP importieren</label>
             <label index="tx_euldap_server.matchgrps">Nur Benutzer aus den folgenden Gruppen importieren (durch Kommata getrennt, * erlaubt)</label>
             <label index="tx_euldap_server.sso_network">Netzwerk f&amp;uuml;r Single Sign On</label>
             <label index="tx_euldap_server.sso_mask">Subnetzmaske f&amp;uuml;r Single Sign On</label>

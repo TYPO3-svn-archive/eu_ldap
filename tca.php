@@ -300,13 +300,10 @@ $TCA["tx_euldap_server"] = Array (
 			)
 		),
 	),
-	"types" => Array (
-		"0" => Array("showitem" => "server;;;;1-1-1, port, version, base_dn, filter, servertype, domain, authenticate_be, user;;;;2-2-2, password, name;;;;3-3-3, mail, address;;;;4-4-4, zip, city, country, phone, fax, www, memberof;;;;5-5-5, build_group, only_emailusers, map_additional_fields, automatic_import, doitfe, matchgrps, timestamp, fe_group, be_group"),
-		"1" => Array("showitem" => "server;;;;1-1-1, port, version, base_dn, filter, servertype, domain, authenticate_be, user;;;;2-2-2, password, name;;;;3-3-3, mail, address;;;;4-4-4, zip, city, country, phone, fax, www, memberof;;;;5-5-5, build_group, only_emailusers, map_additional_fields, automatic_import, doitfe, matchgrps, timestamp, fe_group, be_group"),
-		"2" => Array("showitem" => "server;;;;1-1-1, port, version, base_dn, filter, servertype, authenticate_be, user;;;;2-2-2, password, username;;;;3-3-3, name, mail, address;;;;4-4-4, zip, city, country, phone, fax, www, memberof;;;;5-5-5, build_group, only_emailusers, map_additional_fields, automatic_import, doitfe, matchgrps, timestamp, fe_group, be_group")
-	),
-	"palettes" => Array (
-		"1" => Array("showitem" => "")
+	"types" => array(
+		"0" => array(
+			"showitem" => "--div--;Server, server, port, version, base_dn, filter, servertype, domain, user, password, --div--;Settings, only_emailusers, authenticate_be, automatic_import. timestamp, --div--;Attributes, name, mail, address, zip, city, country, phone, fax, www, map_additional_fields, --div--;Groups, doitfe, matchgrps, memberof, build_group, fe_group, be_group"
+		)
 	)
 );
 

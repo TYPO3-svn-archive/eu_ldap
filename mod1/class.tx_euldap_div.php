@@ -37,12 +37,12 @@
  *  108:     function additional_fields($map_additional_fields,$ldapres)
  *  130:     function use_memberof($servertype)
  *  156:     function is_in_onlygroups($onlygroup, $groupnamelist)
- *  190:     function assign_groups($Server, $arrGroups, $ldapres, &$gid, &$gname, $table, $pid)
+ *  190:     function assign_groups($server, $arrGroups, $ldapres, &$gid, &$gname, $table, $pid)
  *  341:     function insert_newgrps($table, $grps, $match, $pid)
  *  390:     function update_user($arrServers, $arrGroups, $username, $user_table, $pid)
- *  437:     function update_singleuser($Server, $arrGroups, $user, $user_table, $pid)
+ *  437:     function update_singleuser($server, $arrGroups, $user, $user_table, $pid)
  *  515:     function import_users($pid, $arrServer, $arrGroups, $user_table)
- *  534:     function import_singleuser($arrGroups, $user, $Server, $pid, $user_table, $return=false)
+ *  534:     function import_singleuser($arrGroups, $user, $server, $pid, $user_table, $return=false)
  *  647:     function delete_user($arrServers, $row, $user_table, $delete=true)
  *  690:     function checkNTUser ($server_info,$username,$password)
  *
@@ -67,10 +67,13 @@ class tx_euldap_div {
 	var $localChar;
 	var $conf;
 	
+	var $importGroups;
+	
 	function tx_euldap_div() {
 		global $TYPO3_CONF_VARS;
 		$this->conf = unserialize($TYPO3_CONF_VARS['EXT']['extConf']['eu_ldap']);
 		$this->initChar('');
+		$this->importGroups = 1;
 	}
 	
 	/**
@@ -232,7 +235,6 @@ class tx_euldap_div {
 				#$ldapkey=trim($ldapkey);
 				#$tablekey=trim($tablekey);
 				if ($ldapres[$ldapkey]) {
-					### $insertArray[$tablekey]= str_replace("'", "''", $ldapres[$ldapkey][0]);
 					$insertArray[$tablekey]= str_replace("'", "''", $ldapres[$ldapkey]);
 				}
 			}
@@ -306,15 +308,15 @@ class tx_euldap_div {
 	 * @param	integer		$pageID for the group
 	 * @return	void		- uses refvars gid and gname
 	 */
-	function assign_groups($Server, $arrGroups, $ldapres, &$gid, &$gname, $table, $pid) {
-		$ldapbuildgroup = $Server['build_group'];
-		$use_memberOf = $Server['memberof'];
-		$match = $Server['matchgrps'];
-		$servertype = $Server['servertype'];
+	function assign_groups($server, $arrGroups, $ldapres, &$gid, &$gname, $table, $pid) {
+		$ldapbuildgroup = $server['build_group'];
+		$use_memberOf = $server['memberof'];
+		$match = $server['matchgrps'];
+		$servertype = $server['servertype'];
 		$memberOf = tx_euldap_div::use_memberOf($servertype);
-		$addnewgroups = $Server['doitfe'];
-		$fe_groups = $Server['fe_group'];
-		$be_groups = $Server['be_group'];
+		$addnewgroups = $server['doitfe'];
+		$fe_groups = $server['fe_group'];
+		$be_groups = $server['be_group'];
 		
 		if (''.$use_memberOf != '0') {
 
@@ -324,13 +326,9 @@ class tx_euldap_div {
 			$gname = '';
 
 			if ($memberOf == 'posixGroup') {
-				### $uid = $ldapres['uid'][0];
 				$uid = $ldapres['uid'];
-				/* change the filterstring for searching groups */
-				// $Server['filter'] = "(&(objectclass=posixGroup)(memberUid=<search>))";
-				### $Server['filter'] = "(&(objectclass=posixGroup)(|(memberUid=<search>)(gidNumber=" . $ldapres['gidnumber'][0] . ")))";
-				$Server['filter'] = "(&(objectclass=posixGroup)(|(memberUid=<search>)(gidNumber=" . $ldapres['gidnumber'] . ")))";
-				$group_info = tx_euldap_div::search_ldap($Server, $uid);
+				$server['filter'] = "(&(objectclass=posixGroup)(|(memberUid=<search>)(gidNumber=" . $ldapres['gidnumber'] . ")))";
+				$group_info = tx_euldap_div::search_ldap($server, $uid);
 				while ($k < $group_info['count']) {
 					if (is_array($group_info[$k]['cn'])) {
 						$department = $group_info[$k]['cn'][0];
@@ -343,14 +341,14 @@ class tx_euldap_div {
 						while (($j < sizeof($arrGroups)) && !($group_found)) {
 							if (strtolower($arrGroups[$j]['title']) == strtolower($department)) {
 								$group_found = true;
-								if (tx_euldap_div::is_in_onlygroups($Server['matchgrps'], $arrGroups[$j]['title'])) {
+								if (tx_euldap_div::is_in_onlygroups($server['matchgrps'], $arrGroups[$j]['title'])) {
 									$gid .= ','.$arrGroups[$j]['uid'];
 									$gname .= ','.$arrGroups[$j]['title'];
 								}
 							}
 							$j++;
 						}
-						if (!$group_found && tx_euldap_div::is_in_onlygroups($Server['matchgrps'], $department)) $newgroups[] = $department;
+						if (!$group_found && tx_euldap_div::is_in_onlygroups($server['matchgrps'], $department)) $newgroups[] = $department;
 					}
 					$k++;
 				}
@@ -367,14 +365,14 @@ class tx_euldap_div {
 						while (($j < sizeof($arrGroups)) && !($group_found)) {
 							if (strtolower($arrGroups[$j]['title']) == strtolower($department)) {
 								$group_found = true;
-								if (tx_euldap_div::is_in_onlygroups($Server['matchgrps'], $arrGroups[$j]['title'])) {
+								if (tx_euldap_div::is_in_onlygroups($server['matchgrps'], $arrGroups[$j]['title'])) {
 									$gid .= ','.$arrGroups[$j]['uid'];
 									$gname .= ','.$arrGroups[$j]['title'];
 								}
 							}
 							$j++;
 						}
-						if (!$group_found && tx_euldap_div::is_in_onlygroups($Server['matchgrps'], $department)) $newgroups[] = $department;
+						if (!$group_found && tx_euldap_div::is_in_onlygroups($server['matchgrps'], $department)) $newgroups[] = $department;
 					}
 					$k++;
 				}
@@ -382,42 +380,14 @@ class tx_euldap_div {
 		} else {
 			$department = $ldapbuildgroup;
 			while (ereg('<([^>]*)>', $department, $arrMatches)) {
-				if ((strtolower($arrMatches[1]) != 'ou') && (is_array($ldapres[$arrMatches[1]]))) {
+				if (strtolower($arrMatches[1]) == 'ou') {
 					$gid = '';
 					$gname = '';
-					$jjj=0;
-					while(($jjj < count($ldapres[$arrMatches[1]])-1)){
-						$department = $ldapbuildgroup;
-						$found = $ldapres[$arrMatches[1]][$jjj];
-						$department = str_replace('<'.$arrMatches[1].'>', $found, $department);
-						$j = 0;
-						$group_found = false;
-						while (($j < sizeof($arrGroups)) && !($group_found)) {
-							if (strtolower($arrGroups[$j]['title']) == strtolower($department)) {
-								$group_found = true;
-								if (tx_euldap_div::is_in_onlygroups($Server['matchgrps'], $gname)) {
-									$gid.= ','.$arrGroups[$j]['uid'];
-									$gname.= ','.$arrGroups[$j]['title'];
-								}
-							}
-							$j++;
-						}
-						if (!$group_found && tx_euldap_div::is_in_onlygroups($Server['matchgrps'], $department)) $newgroups[] = $department;
-						$jjj++;
-					}
-				} else {
-					$gid = '';
-					$gname = '';
-					### if (is_array($ldapres['dn'])) {
-					###	$dn = $ldapres['dn'][0];
-					### } else {
-						$dn = $ldapres['dn'];
-					### }
+					$dn = $ldapres['dn'];
 					$arrDN = explode(",", $dn);
 					for ($jj=0; $jj < count($arrDN); $jj++) {
 						$arrKeys = explode("=", $arrDN[$jj]);
-						### if (strtolower($arrKeys[0]) == strtolower($arrMatches[1])) {
-						if (strtolower($arrKeys) == strtolower($arrMatches[1])) {
+						if (strtolower($arrKeys[1]) == strtolower($arrMatches[1])) {
 							$found = $arrKeys[1];
 							$tmpdepartment = str_replace('<'.$arrMatches[1].'>', $found, $department);
 							$j = 0;
@@ -435,6 +405,48 @@ class tx_euldap_div {
 						}
 					}
 					$department = $tmpdepartment;
+				} elseif (is_array($ldapres[$arrMatches[1]])) {
+					$gid = '';
+					$gname = '';
+					$jjj = 0;
+					while(($jjj < count($ldapres[$arrMatches[1]])-1)){
+						$department = $ldapbuildgroup;
+						$found = $ldapres[$arrMatches[1]][$jjj];
+						$department = str_replace('<'.$arrMatches[1].'>', $found, $department);
+						$j = 0;
+						$group_found = false;
+						while (($j < sizeof($arrGroups)) && !($group_found)) {
+							if (strtolower($arrGroups[$j]['title']) == strtolower($department)) {
+								$group_found = true;
+								if (tx_euldap_div::is_in_onlygroups($server['matchgrps'], $gname)) {
+									$gid.= ','.$arrGroups[$j]['uid'];
+									$gname.= ','.$arrGroups[$j]['title'];
+								}
+							}
+							$j++;
+						}
+						if (!$group_found && tx_euldap_div::is_in_onlygroups($server['matchgrps'], $department)) $newgroups[] = $department;
+						$jjj++;
+					}
+				} else {
+					$gid = '';
+					$gname = '';
+					$department = $ldapbuildgroup;
+					$found = $ldapres[$arrMatches[1]];
+					$department = str_replace('<'.$arrMatches[1].'>', $found, $department);
+					$j = 0;
+					$group_found = false;
+					while (($j < sizeof($arrGroups)) && !($group_found)) {
+						if (strtolower($arrGroups[$j]['title']) == strtolower($department)) {
+							$group_found = true;
+							if (tx_euldap_div::is_in_onlygroups($server['matchgrps'], $gname)) {
+								$gid.= ','.$arrGroups[$j]['uid'];
+									$gname.= ','.$arrGroups[$j]['title'];
+							}
+						}
+						$j++;
+					}
+					if (!$group_found && tx_euldap_div::is_in_onlygroups($server['matchgrps'], $department)) $newgroups[] = $department;
 				}
 			}
 		}
@@ -550,53 +562,50 @@ class tx_euldap_div {
 	 * updates single user (see above)
 	 * does not return anything at all
 	 *
-	 * @param	array		$Server: row with ldap-server settings
+	 * @param	array		$server: row with ldap-server settings
 	 * @param	array		$arrGroups: array of groups (fe/be)
 	 * @param	array		$user: user to be updated (ldap attribute array)
 	 * @param	string		$user_table: fe_users or be_users
 	 * @param	integer		$pid: pageID; necessary for automatic creation of groups
 	 * @return	void		nothing at all..
 	 */
-	function update_singleuser($Server, $arrGroups, $user, $user_table, $pid) {
-		$ldapserver = $Server['server'];
-		$ldapname = $Server['name'];
-		$ldapusername = $Server['username'];
-		$ldapmail = $Server['mail'];
-		$ldapphone = $Server['phone'];
-		$ldapfax = $Server['fax'];
-		$ldapaddress = $Server['address'];
-		$ldapzip = $Server['zip'];
-		$ldapcity = $Server['city'];
-		$ldapcountry = $Server['country'];
-		$ldapwww = $Server['www'];
-		$ldapbuildgroup = $Server['build_group'];
-		$use_memberOf = $Server['memberof'];
-		$map_additional_fields = $Server['map_additional_fields'];
-		if ($use_memberOf) $use_memberOf = tx_euldap_div::use_memberof($Server['servertype']);
-		switch($Server['servertype']) {
+	function update_singleuser($server, $arrGroups, $user, $user_table, $pid) {
+		$ldapserver = $server['server'];
+		$ldapname = $server['name'];
+		$ldapusername = $server['username'];
+		$ldapmail = $server['mail'];
+		$ldapphone = $server['phone'];
+		$ldapfax = $server['fax'];
+		$ldapaddress = $server['address'];
+		$ldapzip = $server['zip'];
+		$ldapcity = $server['city'];
+		$ldapcountry = $server['country'];
+		$ldapwww = $server['www'];
+		if ($this->importGroups) {
+			$ldapbuildgroup = $server['build_group'];
+			$use_memberOf = $server['memberof'];
+		}
+		$map_additional_fields = $server['map_additional_fields'];
+		if ($use_memberOf) $use_memberOf = tx_euldap_div::use_memberof($server['servertype']);
+		switch($server['servertype']) {
 			case 0:
 			case 1:
 				if ($user['sAMAccountName']) {
-					### $username = $user['sAMAccountName'][0];
 					$username = $user['sAMAccountName'];
 				} else {
-					### $username = $user['samaccountname'][0];
 					$username = $user['samaccountname'];
 				}
 				break;
 			case 2:
 			case 3:
-				### $username = $user[$ldapusername][0];
 				$username = $user[$ldapusername];
 				break;
 		}
 
-		### $name = $user[$ldapname][0];
-		### $email = $user[$ldapmail][0];
 		$name = $user[$ldapname];
 		$email = $user[$ldapmail];
 		
-		if ($ldapbuildgroup || $use_memberOf) tx_euldap_div::assign_groups($Server, $arrGroups, $user, $gid, $gname, $user_table, $pid);
+		if ($ldapbuildgroup || $use_memberOf) tx_euldap_div::assign_groups($server, $arrGroups, $user, $gid, $gname, $user_table, $pid);
 		// preserve groups not imported by eu_ldap
 		$dbres = $GLOBALS['TYPO3_DB']->exec_SELECTquery ('uid', ($user_table=='fe_users'?'fe_groups':'be_groups'), 'eu_ldap = 0 AND uid IN (SELECT usergroup FROM '.$user_table." WHERE lower(username) = '".strtolower($GLOBALS['TYPO3_DB']->quoteStr($username,$user_table))."')");
 		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($dbres)) {
@@ -663,44 +672,44 @@ class tx_euldap_div {
 	 *
 	 * @param	array		$arrGroups: typo groups
 	 * @param	array		$user: uset to be inserted
-	 * @param	array		$Server: server information (ldap)
+	 * @param	array		$server: server information (ldap)
 	 * @param	integer		$pid: pid of user storage page
 	 * @param	string		$user_table: fe_users or be_users
 	 * @param	boolean		$return: should html-output be generated?
 	 * @return	string		boolean if $return = false or html-table
 	 */
-	function import_singleuser($arrGroups, $user, $Server, $pid, $user_table, $return=false) {
+	function import_singleuser($arrGroups, $user, $server, $pid, $user_table, $return=false) {
 		$OK = false;
-		$ldapserver = $Server['server'];
-		$ldapname = $Server['name'];
-		$ldapusername = $Server['username'];
-		$ldapmail = $Server['mail'];
-		$ldapphone = $Server['phone'];
-		$ldapfax = $Server['fax'];
-		$only_emailusers = $Server['only_emailusers'];
-		$ldapaddress = $Server['address'];
-		$ldapzip = $Server['zip'];
-		$ldapcity = $Server['city'];
-		$ldapcountry = $Server['country'];
-		$ldapwww = $Server['www'];
-		$use_memberOf = $Server['memberof'];
-		$map_additional_fields = $Server['map_additional_fields'];
-		if ($use_memberOf) $use_memberOf = tx_euldap_div::use_memberof($Server['servertype']);
+		$ldapserver = $server['server'];
+		$ldapname = $server['name'];
+		$ldapusername = $server['username'];
+		$ldapmail = $server['mail'];
+		$ldapphone = $server['phone'];
+		$ldapfax = $server['fax'];
+		$only_emailusers = $server['only_emailusers'];
+		$ldapaddress = $server['address'];
+		$ldapzip = $server['zip'];
+		$ldapcity = $server['city'];
+		$ldapcountry = $server['country'];
+		$ldapwww = $server['www'];
+		if ($this->importGroups) {
+			$ldapbuildgroup = $server['build_group'];
+			$use_memberOf = $server['memberof'];
+		}
+		$map_additional_fields = $server['map_additional_fields'];
+		if ($use_memberOf) $use_memberOf = tx_euldap_div::use_memberof($server['servertype']);
 		
-		switch($Server['servertype']) {
+		switch($server['servertype']) {
 			case 0:
 			case 1:
 				if ($user['sAMAccountName']) {
-					### $username = $user['sAMAccountName'][0];
 					$username = $user['sAMAccountName'];
 				} else {
-					### $username = $user['samaccountname'][0];
 					$username = $user['samaccountname'];
 				}
 				break;
 			case 2:
 			case 3:
-				### $username = $user[$ldapusername][0];
 				$username = $user[$ldapusername];
 				break;
 		}
@@ -709,19 +718,14 @@ class tx_euldap_div {
 		$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 		
 		if (!is_array($row) && ($username != '')){
-			### $name = $user[$ldapname][0];
-			### $email = $user[$ldapmail][0];
-			### $telephone = $user[$ldapphone][0];
 			$name = $user[$ldapname];
 			$email = $user[$ldapmail];
 			$telephone = $user[$ldapphone];
 			
-			$ldapbuildgroup = $Server['build_group'];
-			
 			if (($email) || !($only_emailusers)) {
-				if ($ldapbuildgroup || $use_memberOf) tx_euldap_div::assign_groups($Server, $arrGroups, $user, $gid, $gname, $user_table, $pid);
+				if ($ldapbuildgroup || $use_memberOf) tx_euldap_div::assign_groups($server, $arrGroups, $user, $gid, $gname, $user_table, $pid);
 				$show = false;
-				if ($Server['matchgrps']) {
+				if ($server['matchgrps']) {
 					if ($gname) $show = true;
 				} else {
 					$show = true;
@@ -747,7 +751,7 @@ class tx_euldap_div {
 					}
 					$insValues=array('crdate' => time(),
 						'tstamp' => time(),
-						'pid'=> $pid,
+						'pid' => $pid,
 						'username' => str_replace("'", "''", $username),
 						'email' => $email,
 						'password' => $password,
@@ -756,14 +760,6 @@ class tx_euldap_div {
 					if ($ldapbuildgroup || $use_memberOf) $insValues['usergroup'] = $gid;
 
 					if ($user_table == 'fe_users') {
-						### $insValues['address'] = str_replace("'", "''", $user[$ldapaddress][0]);
-						### $insValues['zip'] = str_replace("'", "''", $user[$ldapzip][0]);
-						### $insValues['city'] = str_replace("'", "''", $user[$ldapcity][0]);
-						### $insValues['country'] = str_replace("'", "''", $user[$ldapcountry][0]);
-						### $insValues['www'] = str_replace("'", "''", $user[$ldapwww][0]);
-						### $insValues['telephone'] = str_replace("'", "''", $telephone);
-						### $insValues['fax'] = str_replace("'", "''", $user[$ldapfax][0]);
-						### $insValues['name'] = str_replace("'", "''", $name);
 						$insValues['address'] = str_replace("'", "''", $user[$ldapaddress]);
 						$insValues['zip'] = str_replace("'", "''", $user[$ldapzip]);
 						$insValues['city'] = str_replace("'", "''", $user[$ldapcity]);
@@ -784,7 +780,7 @@ class tx_euldap_div {
 				}
 			}
 		} elseif ($username !='') {
-			tx_euldap_div::update_singleuser($Server, $arrGroups, $user, $user_table, $pid);
+			tx_euldap_div::update_singleuser($server, $arrGroups, $user, $user_table, $pid);
 		}
 		
 		return ($return)?$content:$OK;

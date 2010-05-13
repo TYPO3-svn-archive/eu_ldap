@@ -5,6 +5,7 @@ $config = unserialize($TYPO3_CONF_VARS['EXT']['extConf']['eu_ldap']);
 
 if ($config['enableFE'] && !$config['enableBE']) {
 	$subTypes = 'getUserFE,authUserFE';
+	$TYPO3_CONF_VARS['FE']['loginSecurityLevel'] = 'normal';
 }
 
 if (!$config['enableFE'] && $config['enableBE']) {
@@ -14,6 +15,7 @@ if (!$config['enableFE'] && $config['enableBE']) {
 
 if ($config['enableFE'] && $config['enableBE']) {
 	$subTypes = 'getUserFE,authUserFE,getUserBE,authUserBE';
+	$TYPO3_CONF_VARS['FE']['loginSecurityLevel'] = 'normal';
 	$TYPO3_CONF_VARS['BE']['loginSecurityLevel'] = 'normal';
 }
 
@@ -40,7 +42,7 @@ t3lib_extMgm::addService($_EXTKEY,  'auth' /* sv type */,  'tx_euldap_sv2' /* sv
 
 		'title' => 'LDAP-Authentication',
 		'description' => 'Authentication service for LDAP (FE and BE).',
-		'subtype' => 'getUserBE,authUserBE',
+		'subtype' => $subTypes,
 		'available' => 1,
 		'priority' => 90,
 		'quality' => 50,

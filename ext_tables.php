@@ -11,12 +11,12 @@ $TCA["tx_euldap_server"] = Array (
 		"label" => "server",	
 //		"rootLevel" => 1,
 		"tstamp" => "tstamp",
-		"type" => "servertype",
 		"crdate" => "crdate",
 		"cruser_id" => "cruser_id",
 		"sortby" => "sorting",
 		"dynamicConfigFile" => t3lib_extMgm::extPath($_EXTKEY)."tca.php",
 		"iconfile" => t3lib_extMgm::extRelPath($_EXTKEY)."icon_tx_euldap_server.gif",
+		'dividers2tabs'     => true,
 	),
 	"feInterface" => Array (
 		"fe_admin_fieldList" => "server, port, base_dn, user, password",

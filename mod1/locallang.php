@@ -26,6 +26,7 @@ $LOCAL_LANG = Array (
 		'ldap' => 'LDAP server',
 		'no_servers' => 'No LDAP servers defined.',
 		'submit' => 'START!',
+		'import_groups' => 'Import/Update user groups',
 	),
 	'dk' => Array (
 	),
@@ -49,6 +50,7 @@ $LOCAL_LANG = Array (
 		'ldap' => 'LDAP-Server',
 		'no_servers' => 'Keine LDAP-Server angelegt.',
 		'submit' => 'START!',
+		'import_groups' => 'Benutzergruppen importieren/aktualisieren',
 	),
 	'no' => Array (
 	),
