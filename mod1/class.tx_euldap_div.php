@@ -379,7 +379,7 @@ class tx_euldap_div {
 			}
 		} else {
 			$department = $ldapbuildgroup;
-			while (ereg('<([^>]*)>', $department, $arrMatches)) {
+			while (preg_match('/<([^>]*)>/', $department, $arrMatches)) {
 				if (strtolower($arrMatches[1]) == 'ou') {
 					$gid = '';
 					$gname = '';
