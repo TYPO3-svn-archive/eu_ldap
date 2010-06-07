@@ -271,25 +271,28 @@ class tx_euldap_div {
 	 * [Function test if User is in one of the specified groups (only_groups)]
 	 *
 	 * @param	[comma		seperated string]		$onlygroup: ...
-	 * @param	[comma		seperated string]		$groupnamelist: ...
+	 * @param	[string]		$groupname: ...
 	 * @return	[type]		...
 	 */
-	function is_in_onlygroups($onlygroup, $groupnamelist) {
+	function is_in_onlygroups($onlygroup, $groupname) {
+		$retValue = 0;
 		//No Group is selected then all users allowed
 		if ($onlygroup == "") {
-			return 1;
+			$retValue = 1;
 		}
 		$onlygrouparray = explode(",",$onlygroup);
-		$grouparray = explode(",",$groupnamelist);
-		for ($k=0; $k < count($grouparray); $k++) {
-			$group = $grouparray[$k];
+		if (is_array($onlygrouparray)) {
 			foreach ($onlygrouparray as $value) {
-				$value=strtolower(trim($value));
+				$value = strtolower(trim($value));
 				$regExpr = str_replace("?", ".", str_replace("*", ".*", "/^".$value."$/"));
-				if (preg_match($regExpr, strtolower($group))) return 1;
-	       	}
+				if (preg_match($regExpr, strtolower($groupname))) $retValue = 1;
+			}
+		} else {
+			$value = strtolower(trim($onlygroup));
+			$regExpr = str_replace("?", ".", str_replace("*", ".*", "/^".$value."$/"));
+			if (preg_match($regExpr, strtolower($groupname))) $retValue = 1;
 		}
-		return 0;
+		return $retValue;
 	}
 
 
@@ -418,7 +421,7 @@ class tx_euldap_div {
 						while (($j < sizeof($arrGroups)) && !($group_found)) {
 							if (strtolower($arrGroups[$j]['title']) == strtolower($department)) {
 								$group_found = true;
-								if (tx_euldap_div::is_in_onlygroups($server['matchgrps'], $gname)) {
+								if (tx_euldap_div::is_in_onlygroups($server['matchgrps'], $arrGroups[$j]['title'])) {
 									$gid.= ','.$arrGroups[$j]['uid'];
 									$gname.= ','.$arrGroups[$j]['title'];
 								}
@@ -439,7 +442,7 @@ class tx_euldap_div {
 					while (($j < sizeof($arrGroups)) && !($group_found)) {
 						if (strtolower($arrGroups[$j]['title']) == strtolower($department)) {
 							$group_found = true;
-							if (tx_euldap_div::is_in_onlygroups($server['matchgrps'], $gname)) {
+							if (tx_euldap_div::is_in_onlygroups($server['matchgrps'], $arrGroups[$j]['title'])) {
 								$gid.= ','.$arrGroups[$j]['uid'];
 									$gname.= ','.$arrGroups[$j]['title'];
 							}
