@@ -299,10 +299,23 @@ $TCA["tx_euldap_server"] = Array (
 				'maxitems' => 10,
 			)
 		),
+		'feuser_pid' => Array (		
+			'l10n_mode' => 'exclude',
+			'exclude' => 1,	
+			'label' => 'LLL:EXT:eu_ldap/locallang_db.php:tx_euldap_server.feuser_pid',
+			'config' => Array (
+				'type' => 'select',
+				'foreign_table' => 'pages',
+				'foreign_table_where' => 'AND doktype = 254 ',
+				'size' => 1,	
+				'minitems' => 0,
+				'maxitems' => 1,
+			)
+		),
 	),
 	"types" => array(
 		"0" => array(
-			"showitem" => "--div--;Server, server, port, version, base_dn, filter, servertype, domain, user, password, --div--;Settings, automatic_import, only_emailusers, authenticate_be, automatic_import. timestamp, --div--;Attributes, name, mail, address, zip, city, country, phone, fax, www, map_additional_fields, --div--;Groups, doitfe, matchgrps, memberof, build_group, fe_group, be_group"
+			"showitem" => "--div--;Server, server, port, version, base_dn, filter, servertype, domain, user, password, --div--;Settings, automatic_import, only_emailusers, authenticate_be, automatic_import, feuser_pid, timestamp, --div--;Attributes, name, mail, address, zip, city, country, phone, fax, www, map_additional_fields, --div--;Groups, doitfe, matchgrps, memberof, build_group, fe_group, be_group"
 		)
 	)
 );

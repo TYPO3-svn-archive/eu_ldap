@@ -53,6 +53,7 @@
             <label index="tx_euldap_server.timestamp"></label>
             <label index="tx_euldap_server.be_group"></label>
             <label index="tx_euldap_server.fe_group"></label>
+            <label index="tx_euldap_server.feuser_pid"></label>
             <label index="tx_euldap_scheduler">Scheduler</label>
             <label index="tx_euldap_scheduler.title"></label>
             <label index="tx_euldap_scheduler.action.I.0"></label>
@@ -121,6 +122,7 @@
             <label index="tx_euldap_server.timestamp">Timestamp in LDAP for last login</label>
             <label index="tx_euldap_server.fe_group">Assign all imported users to these FE groups</label>
 			<label index="tx_euldap_server.be_group">Assign all imported users to these BE groups</label>
+            <label index="tx_euldap_server.feuser_pid">Store imported FE user records in this page</label>
 			<label index="tx_euldap_scheduler">Scheduler</label>
             <label index="tx_euldap_scheduler.title">Configuration title</label>
             <label index="tx_euldap_scheduler.action.I.0">Import new user</label>
@@ -186,6 +188,7 @@
             <label index="tx_euldap_server.timestamp">Timestamp f&amp;uuml;r letztes Login in LDAP</label>
             <label index="tx_euldap_server.fe_group">Ordne alle Benutzer diesen FE-Gruppen zu</label>
 			<label index="tx_euldap_server.be_group">Ordne alle Benutzer diesen BE-Gruppen zu</label>
+            <label index="tx_euldap_server.feuser_pid">Speichere importierte FE-Benutzer auf dieser Seite</label>
 			<label index="tx_euldap_scheduler">Scheduler</label>
             <label index="tx_euldap_scheduler.title">Name der Konfiguration</label>
             <label index="tx_euldap_scheduler.action.I.0">Neue Benutzer importieren</label>
