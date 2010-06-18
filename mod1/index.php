@@ -35,7 +35,7 @@
 	require_once ('class.tx_euldap_div.php');
 	require ($BACK_PATH.'init.php');
 	require ($BACK_PATH.'template.php');
-	include ('locallang.php');
+	// include ('locallang.php');
 	require_once (PATH_t3lib.'class.t3lib_scbase.php');
 	$BE_USER->modAccess($MCONF, 1);
 	// This checks permissions and exits if the users has no permission for entry.
@@ -50,6 +50,8 @@
  */
 		function init() {
 			global $AB, $BE_USER, $LANG, $BACK_PATH, $TCA_DESCR, $TCA, $HTTP_GET_VARS, $HTTP_POST_VARS, $CLIENT, $TYPO3_CONF_VARS;
+			
+			$LANG->includeLLFile('EXT:eu_ldap/mod1/locallang.xml');
 			 
 			parent::init();
 			 
@@ -127,12 +129,10 @@
 				$this->content .= $this->doc->header($LANG->getLL('title'));
 				$this->content .= $this->doc->spacer(5);
 				$this->content .= $this->doc->section('', $this->doc->funcMenu($headerSection, t3lib_BEfunc::getFuncMenu($this->id, 'SET[function]', $this->MOD_SETTINGS['function'], $this->MOD_MENU['function'])));
-				$this->content .= $this->doc->divider(5);
-				 
 				 
 				// Render content:
-				$this->moduleContent();
-				 
+				$this->content .= $this->doc->divider(10);
+				$this->moduleContent();	 
 				 
 				// ShortCut
 				if ($BE_USER->mayMakeShortcut()) {
@@ -161,7 +161,6 @@
 		function printContent() {
 			global $SOBE;
 			 
-			$this->content .= $this->doc->middle();
 			$this->content .= $this->doc->endPage();
 			echo $this->content;
 		}
@@ -190,23 +189,43 @@
 				if ($HTTP_POST_VARS['submit']) {
 					$doCommand = true;
 				} else {
+					$dbres = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+						'*',
+						'tx_euldap_server',
+						'pid IN ('.$this->id.')'
+					);
+					$content = '';
+					while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($dbres)) {
+						$params = '&edit[tx_euldap_server]['.$row['uid'].']=edit';
+						$serverLink = '<a href="#" style="text-decoration:underline" onclick="'.htmlspecialchars(t3lib_BEfunc::editOnClick($params, $GLOBALS['BACK_PATH'], $this->script)).'">'.$row['server'].'</a>';
+						$content = '<div><input type="checkbox" name="useServer[]" checked value="'.$row['uid'].'"> '.$serverLink.':'.$row['port'].' ('.$row['base_dn'].')</div>';
+					}
+					
+					$this->content .= $this->doc->spacer(10);
+					$this->content .= $this->doc->section($LANG->getLL('ldapServers'), $content);
+					$this->content .= $this->doc->spacer(10);
 					switch((string)$this->MOD_SETTINGS['function']) {
 						case 2:
 						case 3:
 						case 5:
 						case 6:
-							$this->content .= '<br/><p><input type="checkbox" name="import_groups" value="1" checked /> '.$LANG->getLL('import_groups').'</p><br/>';
+							$content = '<input type="checkbox" name="importGroups" value="1" checked /> '.$LANG->getLL('importGroups').'</p><br/>';
+							$this->content .= $this->doc->section($LANG->getLL('groupHandling'), $content);
+							$this->content .= $this->doc->spacer(10);
 							break;
 					}
+					$this->content .= $this->doc->divider(10);
+					$this->content .= $this->doc->spacer(10);
 					$this->content .= '<p><input type="submit" name="submit" value="'.$LANG->getLL('submit').'" /></p>';
 				}
 			} else {
 				$this->content .= $LANG->getLL('no_servers');
 			}
 			
-			if ($doCommand && $this->id) {
+			if ($doCommand && $this->id && $HTTP_POST_VARS['useServer']) {
 				$importGroups = 0;
-				if ($HTTP_POST_VARS['import_groups'] == '1') $importGroups = 1;
+				$useServer = implode(', ', $HTTP_POST_VARS['useServer']);
+				if ($HTTP_POST_VARS['importGroups'] == '1') $importGroups = 1;
 				switch((string)$this->MOD_SETTINGS['function']) {
 					case 1: //summary
 						// Frontend-Users
@@ -241,27 +260,27 @@
 						}
 						break;
 					case 2: //update FE-users
-						$content = $this->index_update_users('fe', $this->id, $importGroups);
+						$content = $this->index_update_users('fe', $this->id, $importGroups, $useServer);
 						$this->content .= $this->doc->section($LANG->getLL('users').":", $content, 0, 1);
 						break;
 					case 5: //update BE-users
-						$content = $this->index_update_users('be', 0, $importGroups);
+						$content = $this->index_update_users('be', 0, $importGroups, $useServer);
 						$this->content .= $this->doc->section($LANG->getLL('users').":", $content, 0, 1);
 						break;
 					case 3: //import FE-users
-						$content = $this->index_import_users('fe', $this->id, $importGroups);
+						$content = $this->index_import_users('fe', $this->id, $importGroups, $useServer);
 						$this->content .= $this->doc->section($LANG->getLL('new').' '.$LANG->getLL('users').":", $content, 0, 1);
 						break;
 					case 6: //import BE-users
-						$content = $this->index_import_users('be', 0, $importGroups);
+						$content = $this->index_import_users('be', 0, $importGroups, $useServer);
 						$this->content .= $this->doc->section($LANG->getLL('new').' '.$LANG->getLL('users').":", $content, 0, 1);
 						break;
 					case 4: //delete FE-users
-						$content = $this->index_delete_users('fe_users', $this->id);
+						$content = $this->index_delete_users('fe_users', $this->id, $useServer);
 						$this->content .= $this->doc->section($LANG->getLL('deleted').' '.$LANG->getLL('users').":", $content, 0, 1);
 						break;
 					case 7: //delete BE-users
-						$content = $this->index_delete_users('be_users', 0);
+						$content = $this->index_delete_users('be_users', 0, $useServer);
 						$this->content .= $this->doc->section($LANG->getLL('deleted').' '.$LANG->getLL('users').":", $content, 0, 1);
 						break;
 				}
@@ -275,7 +294,7 @@
  * @param	[type]		$pid: ...
  * @return	[type]		...
  */
-		function index_update_users($user_prefix, $pid, $importGroups) {
+		function index_update_users($user_prefix, $pid, $importGroups, $useServer) {
 			global $LANG;
 			
 			$this->tx_euldap_div->initChar('');
@@ -293,13 +312,14 @@
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'*',
 				$user_prefix.'_users',
-				'NOT deleted AND pid = '.$pid
+				'NOT deleted'
 			);
 			// LDAP
 			$dbres = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'*',
 				'tx_euldap_server',
 				($this->id?'pid IN ('.$this->id.') AND ':'')
+				.'uid IN (0, '.$useServer.') AND '
 				.'authenticate_be IN ('.($user_prefix=='fe'?'0,':'').($user_prefix=='be'?'1,':'').'2)'
 			);
 
@@ -348,7 +368,7 @@
  * @param	[type]		$pid: ...
  * @return	[type]		...
  */
-		function index_import_users($user_prefix, $pid, $import_groups) {
+		function index_import_users($user_prefix, $pid, $import_groups, $useServer) {
 			global $LANG;
 			
 			$this->tx_euldap_div->initChar('');
@@ -358,7 +378,7 @@
 			$dbres = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'uid, title',
 				$user_prefix.'_groups',
-				sprintf('deleted = 0 AND hidden = 0 %s', ($this->checkPid?' AND pid = '.$this->checkPid_value:''))
+				'deleted = 0 AND hidden = 0'
 			);
 			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($dbres)) {
 				$arrGroups[] = $row;
@@ -368,6 +388,7 @@
 				'*',
 				'tx_euldap_server',
 				($this->id?'pid IN ('.$this->id.') AND ':'')
+				.'uid IN (0, '.$useServer.') AND '
 				.'authenticate_be IN ('.($user_prefix=='fe'?'0,':'').($user_prefix=='be'?'1,':'').'2)'
 			);
 			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($dbres)) {
@@ -387,7 +408,7 @@
 				</tr>';
 			$i = 0;
 			while ($i < count($arrServers)) {
-				$content .= $this->tx_euldap_div->import_users($pid, $arrServers[$i], $arrGroups, $user_prefix.'_users');
+				$content .= $this->tx_euldap_div->import_users($arrServers[$i], $arrGroups, $user_prefix.'_users');
 				$i++;
 			}
 			$content .= '</table>';
@@ -401,7 +422,7 @@
  * @param	[type]		$pid: ...
  * @return	[type]		...
  */
-		function index_delete_users($user_table, $pid) {
+		function index_delete_users($user_table, $pid, $useServer) {
 			global $LANG;
 			
 			$this->tx_euldap_div->initChar('');
@@ -417,7 +438,8 @@
 				'*',
 				'tx_euldap_server',
 				($this->id?'pid IN ('.$this->id.') AND ':'')
-				.'authenticate_be IN ('.($user_table=='fe_users'?'0,':'').($user_table=='be_users'?'1,':'').'2)'
+				.'uid IN (0, '.$useServer.') AND '
+				.'authenticate_be IN ('.($user_prefix=='fe'?'0,':'').($user_prefix=='be'?'1,':'').'2)'
 			);
 			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($dbres)) {
 				$arrServers[] = $row;

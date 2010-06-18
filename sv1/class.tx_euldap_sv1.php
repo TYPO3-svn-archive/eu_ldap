@@ -112,14 +112,9 @@ class tx_euldap_sv1 extends tx_sv_authbase {
 					$ldapres = $objLdap->checkNTUser($row, $this->username, $this->password);
 					if (is_array($ldapres)) {
 						if ($this->conf['logLevel'] >= 1) t3lib_div::devLog('Login successful', 'eu_ldap', -1);
-						if ($this->authInfo['db_user']['check_pid_clause']) {
-							$pid = $this->authInfo['db_user']['checkPidList'];
-						} else {
-							$pid = '';
-						}
 						if ($row['automatic_import']) {
 							if ($this->conf['logLevel'] >= 1) t3lib_div::devLog('Importing user '.$this->username, 'eu_ldap', 0);
-							$objLdap->import_singleuser($arrGroups, $ldapres, $row, $pid, $this->authInfo['db_user']['table']);
+							$objLdap->import_singleuser($arrGroups, $ldapres, $row, $this->authInfo['db_user']['table']);
 						}
 						$OK = true;
 						$loginFailure = false;

@@ -656,16 +656,15 @@ class tx_euldap_div {
 	/**
 	 * imports users from ldap-tree
 	 *
-	 * @param	integer		$pid: page id where userdata is stored
 	 * @param	array		$arrServer: array with server information
 	 * @param	array		$arrGroups: array of typo3 groups
 	 * @param	string		$user_table: fe_users or be_users
 	 * @return	string		html content with results
 	 */
-	function import_users($pid, $arrServer, $arrGroups, $user_table) {
+	function import_users($arrServer, $arrGroups, $user_table) {
 		$ldapres = tx_euldap_div::search_ldap($arrServer, '*');
 		for ($l=0; $l<$ldapres['count']; $l++) {
-			$content .= tx_euldap_div::import_singleuser($arrGroups,$ldapres[$l],$arrServer,$pid,$user_table,1);
+			$content .= tx_euldap_div::import_singleuser($arrGroups, $ldapres[$l], $arrServer, $user_table, 1);
 		}
 		return $content;
 	}
@@ -681,7 +680,7 @@ class tx_euldap_div {
 	 * @param	boolean		$return: should html-output be generated?
 	 * @return	string		boolean if $return = false or html-table
 	 */
-	function import_singleuser($arrGroups, $user, $server, $pid, $user_table, $return=false) {
+	function import_singleuser($arrGroups, $user, $server, $user_table, $return=false) {
 		$OK = false;
 		$ldapserver = $server['server'];
 		$ldapname = $server['name'];
@@ -701,6 +700,10 @@ class tx_euldap_div {
 		}
 		$map_additional_fields = $server['map_additional_fields'];
 		if ($use_memberOf) $use_memberOf = tx_euldap_div::use_memberof($server['servertype']);
+		
+		$pid = 0;
+		if ($user_table == 'fe_users') $pid = ($server['feuser_pid']?$server['feuser_pid']:$server['pid']);
+		
 		
 		switch($server['servertype']) {
 			case 0:
@@ -806,7 +809,13 @@ class tx_euldap_div {
 			// HJM 2004-01-16: von == auf >= ge�ndert, da es im NML-Tree mehrere Userobjecte gibt, die nicht anhand von
 			//			Suchkriterien unterschieden werden k�nnen
 			$is_onlygroup = 0;
-			if ($ldapres['count'] >= 1) $user_found = 1;
+			if ($ldapres['count'] >= 1) {
+				if ($user_table == 'fe_users') {
+					if ($row['pid'] == $arrServers[$i]['feuser_pid']) $user_found = 1;
+				} else {
+					 $user_found = 1;
+				}
+			}
 			$i++;
 		}
 		if (!$user_found) {
@@ -918,4 +927,3 @@ class tx_euldap_div {
 	}
 }
 ?>
-

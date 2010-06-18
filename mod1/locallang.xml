@@ -26,7 +26,9 @@
             <label index="no_servers"></label>
             <label index="rownumber_limit"></label>
             <label index="submit"></label>
-            <label index="import_groups"></label>
+            <label index="importGroups"></label>
+            <label index="groupHandling"></label>
+            <label index="ldapServers"></label>
         </labelContext>
     </meta>
     <data type="array">
@@ -51,7 +53,9 @@
             <label index="no_servers">No LDAP servers defined.</label>
             <label index="rownumber_limit">Only the first 10 records are shown!.</label>
             <label index="submit">START!</label>
-            <label index="import_groups">Import/Update groups</label>
+            <label index="importGroups">Import/Update groups</label>
+            <label index="groupHandling">User groups</label>
+            <label index="ldapServers">Query LDAP servers</label>
         </languageKey>
         <languageKey index="dk" type="array">
         </languageKey>
@@ -74,9 +78,11 @@
             <label index="email">e-Mail</label>
             <label index="ldap">LDAP-Server</label>
             <label index="no_servers">Keine LDAP-Server angelegt.</label>
-            <label index="rownumber_limit">Es werden nur die ersten 10 Datens�tze angezeigt!.</label>
+            <label index="rownumber_limit">Es werden nur die ersten 10 Datensätze angezeigt!.</label>
             <label index="submit">START!</label>
-            <label index="import_groups">Gruppen importieren/aktualisieren</label>
+            <label index="importGroups">Gruppen importieren/aktualisieren</label>
+            <label index="groupHandling">Benutzergruppen</label>
+            <label index="ldapServers">Verwende folgende LDAP-Server</label>
         </languageKey>
         <languageKey index="no" type="array">
         </languageKey>
@@ -98,7 +104,7 @@
             <label index="phone">telefono</label>
             <label index="email">email</label>
             <label index="ldap">server LDAP</label>
-            <label index="no_servers">Non è stato definito nessun server LDAP</label>
+            <label index="no_servers">Non Ã¨ stato definito nessun server LDAP</label>
         </languageKey>
         <languageKey index="fr" type="array">
         </languageKey>
@@ -115,40 +121,40 @@
         <languageKey index="fi" type="array">
             <label index="title">LDAP integrointi</label>
             <label index="function1">yhteenveto</label>
-            <label index="function2">Frontend: virkistä käyttäjätiedot hakemistosta</label>
-            <label index="function3">Frontend: hae uudet käyttäjät hakemistosta</label>
-            <label index="function4">Frontend: poista käyttäjät jotka eivät ole hakemistossa</label>
-            <label index="function5">Frontend: virkistä käyttäjätiedot hakemistosta</label>
-            <label index="function6">Frontend: hae uudet käyttäjät hakemistosta</label>
-            <label index="function7">Frontend: poista käyttäjät jotka eivät ole hakemistossa</label>
-            <label index="users">käyttäjät</label>
+            <label index="function2">Frontend: virkistÃ¤ kÃ¤yttÃ¤jÃ¤tiedot hakemistosta</label>
+            <label index="function3">Frontend: hae uudet kÃ¤yttÃ¤jÃ¤t hakemistosta</label>
+            <label index="function4">Frontend: poista kÃ¤yttÃ¤jÃ¤t jotka eivÃ¤t ole hakemistossa</label>
+            <label index="function5">Frontend: virkistÃ¤ kÃ¤yttÃ¤jÃ¤tiedot hakemistosta</label>
+            <label index="function6">Frontend: hae uudet kÃ¤yttÃ¤jÃ¤t hakemistosta</label>
+            <label index="function7">Frontend: poista kÃ¤yttÃ¤jÃ¤t jotka eivÃ¤t ole hakemistossa</label>
+            <label index="users">kÃ¤yttÃ¤jÃ¤t</label>
             <label index="new">uusi</label>
             <label index="deleted">poistetut</label>
             <label index="account">tili</label>
             <label index="name">nimi</label>
-            <label index="group">käyttäjäryhmä</label>
+            <label index="group">kÃ¤yttÃ¤jÃ¤ryhmÃ¤</label>
             <label index="phone">puhelin</label>
-            <label index="email">sähköpostiosoite</label>
+            <label index="email">sÃ¤hkÃ¶postiosoite</label>
             <label index="ldap">LDAP palvelin</label>
-            <label index="no_servers">LDAP palvelinta ei määritetty</label>
+            <label index="no_servers">LDAP palvelinta ei mÃ¤Ã¤ritetty</label>
         </languageKey>
         <languageKey index="tr" type="array">
         </languageKey>
         <languageKey index="se" type="array">
             <label index="title">LDAP Integration</label>
             <label index="function1">sammanfattning</label>
-            <label index="function2">Frontend: uppdatera användardata från katalogen</label>
-            <label index="function3">Frontend: importera nya användare från katalogen</label>
-            <label index="function4">Frontend:  ta bort användare som inte finns i katalogen</label>
-            <label index="function5">Backend: uppdatera användardata från katalogen</label>
-            <label index="function6">Backend: importera nya användare från katalogen</label>
-            <label index="function7">Backend: ta bort användare som inte finns i katalogen</label>
-            <label index="users">användare</label>
+            <label index="function2">Frontend: uppdatera anvÃ¤ndardata frÃ¥n katalogen</label>
+            <label index="function3">Frontend: importera nya anvÃ¤ndare frÃ¥n katalogen</label>
+            <label index="function4">Frontend:  ta bort anvÃ¤ndare som inte finns i katalogen</label>
+            <label index="function5">Backend: uppdatera anvÃ¤ndardata frÃ¥n katalogen</label>
+            <label index="function6">Backend: importera nya anvÃ¤ndare frÃ¥n katalogen</label>
+            <label index="function7">Backend: ta bort anvÃ¤ndare som inte finns i katalogen</label>
+            <label index="users">anvÃ¤ndare</label>
             <label index="new">ny</label>
             <label index="deleted">raderad</label>
             <label index="account">konto</label>
             <label index="name">namn</label>
-            <label index="group">användargrupp</label>
+            <label index="group">anvÃ¤ndargrupp</label>
             <label index="phone">telefon</label>
             <label index="email">epost</label>
             <label index="ldap">LDAP server</label>
