@@ -198,7 +198,7 @@
 					while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($dbres)) {
 						$params = '&edit[tx_euldap_server]['.$row['uid'].']=edit';
 						$serverLink = '<a href="#" style="text-decoration:underline" onclick="'.htmlspecialchars(t3lib_BEfunc::editOnClick($params, $GLOBALS['BACK_PATH'], $this->script)).'">'.$row['server'].'</a>';
-						$content = '<div><input type="checkbox" name="useServer[]" checked value="'.$row['uid'].'"> '.$serverLink.':'.$row['port'].' ('.$row['base_dn'].')</div>';
+						$content .= '<div><input type="checkbox" name="useServer[]" checked value="'.$row['uid'].'"> '.$serverLink.':'.$row['port'].' ('.$row['base_dn'].')</div>';
 					}
 					
 					$this->content .= $this->doc->spacer(10);
