@@ -341,7 +341,7 @@
 				</tr>';
 			$i = 0;
 			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-				$arrDisplay = $this->tx_euldap_div->update_user($arrServers, $arrGroups, $row['username'], $user_prefix.'_users', $this->id);
+				$arrDisplay = $this->tx_euldap_div->update_user($arrServers, $arrGroups, $row['username'], $user_prefix.'_users');
 				if ($arrDisplay && ($i < 10)) {
 					$i++;
 					$content .= '<tr>

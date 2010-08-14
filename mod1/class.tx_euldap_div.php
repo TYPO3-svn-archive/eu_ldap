@@ -103,10 +103,11 @@ class tx_euldap_div {
 	 * @param	string		$findname: username to look for
 	 * @return	array		all ldap entries for user or false
 	 */
-	function search_ldap($server_info,$findname) {
+	function search_ldap($server_info, $findname) {
 		if ($findname) {
 			
 			// convert character set local -> remote
+			$this->remoteChar = $this->csObj->parse_charset($server_info['characterset']);
 			$findname = $this->csObj->conv($findname, $this->localChar, $this->remoteChar);
 			
 			$server = $server_info['server'];
@@ -224,18 +225,20 @@ class tx_euldap_div {
 	 * @return	array		array of field => value
 	 * @todo	must return array of field/value to use DBAL
 	 */
-	function additional_fields($map_additional_fields,$ldapres) {
-		if ($map_additional_fields !="") {
-			$pairs=explode(',',$map_additional_fields);
+	function additional_fields($map_additional_fields, $ldapres, $table) {
+		if ($map_additional_fields != "") {
+			$map_additional_fields = str_replace(chr(10), '', $map_additional_fields);
+			$map_additional_fields = str_replace(chr(13), '', $map_additional_fields);
+			$pairs = explode(',', $map_additional_fields);
 			$insertArray=array(); //initialise array...
 			foreach ($pairs as $value) {
-				list($tablekey, $ldapkey)=explode("=",$value);
-				$ldapkey=strtolower(trim($ldapkey));
-				$tablekey=strtolower(trim($tablekey));
-				#$ldapkey=trim($ldapkey);
-				#$tablekey=trim($tablekey);
+				list($tablekey, $ldapkey) = explode("=", $value);
+				$ldapkey = strtolower(trim($ldapkey));
+				$tablekey = strtolower(trim($tablekey));
+				#$ldapkey = trim($ldapkey);
+				#$tablekey = trim($tablekey);
 				if ($ldapres[$ldapkey]) {
-					$insertArray[$tablekey]= str_replace("'", "''", $ldapres[$ldapkey]);
+					$insertArray[$tablekey] = $GLOBALS['TYPO3_DB']->quoteStr($ldapres[$ldapkey], $table);
 				}
 			}
 		}
@@ -541,18 +544,19 @@ class tx_euldap_div {
 	 * @param	integer		$pid: pageID; necessary for automatic creation of groups
 	 * @return	string		with information about updated user or FALSE if user does not exist in ldap
 	 */
-	function update_user($arrServers, $arrGroups, $username, $user_table, $pid) {
+	function update_user($arrServers, $arrGroups, $username, $user_table, $pid=0) {
 		$i = 0;
 		$user_found = false;
 		
 		while (($i < count($arrServers)) && !($user_found)) {
-			$ldapres = tx_euldap_div::search_ldap($arrServers[$i],$username);
+			$ldapres = tx_euldap_div::search_ldap($arrServers[$i], $username);
 			
 			# print_r($ldapres);
 			
 			if ($ldapres['count'] == 1) {
+				if ($pid == 0) $pid = $arrServers[$i]['feuser_pid'];
 				// use update_single_user from here..
-				$arrDisplay = tx_euldap_div::update_singleuser($arrServers[$i],$arrGroups,$ldapres[0],$user_table,$pid);
+				$arrDisplay = tx_euldap_div::update_singleuser($arrServers[$i], $arrGroups, $ldapres[0], $user_table, $pid);
 				$user_found = true;
 				return $arrDisplay;
 			}
@@ -610,41 +614,43 @@ class tx_euldap_div {
 		
 		if ($ldapbuildgroup || $use_memberOf) tx_euldap_div::assign_groups($server, $arrGroups, $user, $gid, $gname, $user_table, $pid);
 		// preserve groups not imported by eu_ldap
-		$dbres = $GLOBALS['TYPO3_DB']->exec_SELECTquery ('uid', ($user_table=='fe_users'?'fe_groups':'be_groups'), 'eu_ldap = 0 AND uid IN (SELECT usergroup FROM '.$user_table." WHERE lower(username) = '".strtolower($GLOBALS['TYPO3_DB']->quoteStr($username,$user_table))."')");
+		$dbres = $GLOBALS['TYPO3_DB']->exec_SELECTquery ('uid', ($user_table=='fe_users'?'fe_groups':'be_groups'), 'eu_ldap = 0 AND uid IN (SELECT usergroup FROM '.$user_table." WHERE lower(username) = '".strtolower($GLOBALS['TYPO3_DB']->quoteStr($username, $user_table))."')");
 		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($dbres)) {
 			$gid .= ','.$row['uid'];
 		}
 		$gid = implode(',', array_unique(explode(',', $gid)));
 		if ($user_table == 'fe_users') {
 			$map_additional_fields =
-				'address='.$ldapaddress
-				.',zip='.$ldapzip
-				.',city='.$ldapcity
-				.',country='.$ldapcountry
-				.',address='.$ldapaddress
-				.',telephone='.$ldapphone
-				.',fax='.$ldapfax
-				.',www='.$ldapwww
+				'address='.$GLOBALS['TYPO3_DB']->quoteStr($ldapaddress, $user_table)
+				.',zip='.$GLOBALS['TYPO3_DB']->quoteStr($ldapzip, $user_table)
+				.',city='.$GLOBALS['TYPO3_DB']->quoteStr($ldapcity, $user_table)
+				.',country='.$GLOBALS['TYPO3_DB']->quoteStr($ldapcountry, $user_table)
+				.',address='.$GLOBALS['TYPO3_DB']->quoteStr($ldapaddress, $user_table)
+				.',telephone='.$GLOBALS['TYPO3_DB']->quoteStr($ldapphone, $user_table)
+				.',fax='.$GLOBALS['TYPO3_DB']->quoteStr($ldapfax, $user_table)
+				.',www='.$GLOBALS['TYPO3_DB']->quoteStr($ldapwww, $user_table)
 				.($map_additional_fields?','.$map_additional_fields:'');
 			$updateArray = array('tstamp' => time(),
-				'name' => str_replace("'", "''", $name),
-				'email' => $email
+				'name' => $GLOBALS['TYPO3_DB']->quoteStr($name, $user_table),
+				'email' => $GLOBALS['TYPO3_DB']->quoteStr($email, $user_table)
 			);
 			if ($ldapbuildgroup || $use_memberOf) $updateArray['usergroup'] = $gid;
 		} else {
 			$updateArray = array('tstamp' => time(),
-				'email' => $email,
-				'realname' => str_replace("'", "''", $name)
+				'email' => $GLOBALS['TYPO3_DB']->quoteStr($email, $user_table),
+				'realname' => $GLOBALS['TYPO3_DB']->quoteStr($name, $user_table)
 			);
 			if ($ldapbuildgroup || $use_memberOf) $updateArray['usergroup'] = $gid;
 		}
-		$map_additional_fields_up = tx_euldap_div::additional_fields($map_additional_fields, $user);
+		$map_additional_fields_up = tx_euldap_div::additional_fields($map_additional_fields, $user, $user_table);
 		if (is_array($map_additional_fields_up)) $updateArray = t3lib_div::array_merge($updateArray, $map_additional_fields_up);
 		
-		// $sql = $GLOBALS['TYPO3_DB']->UPDATEquery($user_table,"lower(username) = '".strtolower($GLOBALS['TYPO3_DB']->quoteStr($username,$user_table))."' AND pid=".$pid,$updateArray);
-		// debug($sql);
+		/*
+		$sql = $GLOBALS['TYPO3_DB']->UPDATEquery($user_table,"lower(username) = '".strtolower($GLOBALS['TYPO3_DB']->quoteStr($username, $user_table))."' AND pid=".$pid,$updateArray);
+		debug($sql);
+		*/
 		
-		$GLOBALS['TYPO3_DB']->exec_UPDATEquery($user_table,"lower(username) = '".strtolower($GLOBALS['TYPO3_DB']->quoteStr($username,$user_table))."' AND pid=".$pid,$updateArray);
+		$GLOBALS['TYPO3_DB']->exec_UPDATEquery($user_table,"lower(username) = '".strtolower($GLOBALS['TYPO3_DB']->quoteStr($username, $user_table))."' AND pid=".$pid,$updateArray);
 		
 		$arrDisplay['name'] = $name;
 		$arrDisplay['gname'] = $gname;
@@ -719,7 +725,7 @@ class tx_euldap_div {
 				$username = $user[$ldapusername];
 				break;
 		}
-		$query = (($pid)?'pid ='.$pid.' AND ':'')."NOT deleted AND lower(username) = '".$GLOBALS['TYPO3_DB']->quoteStr(strtolower($username),$user_table)."'";
+		$query = (($pid)?'pid ='.$pid.' AND ':'')."NOT deleted AND lower(username) = '".$GLOBALS['TYPO3_DB']->quoteStr(strtolower($username), $user_table)."'";
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('email', $user_table, $query);
 		$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 		
@@ -766,20 +772,20 @@ class tx_euldap_div {
 					if ($ldapbuildgroup || $use_memberOf) $insValues['usergroup'] = $gid;
 
 					if ($user_table == 'fe_users') {
-						$insValues['address'] = str_replace("'", "''", $user[$ldapaddress]);
-						$insValues['zip'] = str_replace("'", "''", $user[$ldapzip]);
-						$insValues['city'] = str_replace("'", "''", $user[$ldapcity]);
-						$insValues['country'] = str_replace("'", "''", $user[$ldapcountry]);
-						$insValues['www'] = str_replace("'", "''", $user[$ldapwww]);
-						$insValues['telephone'] = str_replace("'", "''", $telephone);
-						$insValues['fax'] = str_replace("'", "''", $user[$ldapfax]);
-						$insValues['name'] = str_replace("'", "''", $name);
+						$insValues['address'] = $GLOBALS['TYPO3_DB']->quoteStr($user[$ldapaddress], $user_table);
+						$insValues['zip'] = $GLOBALS['TYPO3_DB']->quoteStr($user[$ldapzip], $user_table);
+						$insValues['city'] = $GLOBALS['TYPO3_DB']->quoteStr($user[$ldapcity], $user_table);
+						$insValues['country'] = $GLOBALS['TYPO3_DB']->quoteStr($user[$ldapcountry], $user_table);
+						$insValues['www'] = $GLOBALS['TYPO3_DB']->quoteStr($user[$ldapwww], $user_table);
+						$insValues['telephone'] = $GLOBALS['TYPO3_DB']->quoteStr($telephone, $user_table);
+						$insValues['fax'] = $GLOBALS['TYPO3_DB']->quoteStr($user[$ldapfax], $user_table);
+						$insValues['name'] = $GLOBALS['TYPO3_DB']->quoteStr($name);
 					} else {
 						$insValues['options'] = '3';
-						$insValues['realname'] = str_replace("'", "''", $name);
+						$insValues['realname'] = $GLOBALS['TYPO3_DB']->quoteStr($name, $user_table);
 						$insValues['fileoper_perms'] = '1';
 					}
-					$mapArray = tx_euldap_div::additional_fields($map_additional_fields,$user);
+					$mapArray = tx_euldap_div::additional_fields($map_additional_fields, $user, $user_table);
 					if (is_array($mapArray)) $insValues = t3lib_div::array_merge($insValues, $mapArray);
 					
 					$GLOBALS['TYPO3_DB']->exec_INSERTquery($user_table,$insValues);
@@ -853,8 +859,10 @@ class tx_euldap_div {
 	function checkNTUser ($server_info, $username, $password) {
 	
 		// convert character set local -> remote
+		$this->remoteChar = $this->csObj->parse_charset($server_info['characterset']);
 		$username = $this->csObj->conv($username, $this->localChar, $this->remoteChar);
 		$password = $this->csObj->conv($password, $this->localChar, $this->remoteChar);
+		
 		$server = $server_info['server'];
 		$ldapport = $server_info['port'];
 		$domain = $server_info['domain'];
