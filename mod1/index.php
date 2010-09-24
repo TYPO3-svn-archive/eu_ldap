@@ -439,7 +439,7 @@
 				'tx_euldap_server',
 				($this->id?'pid IN ('.$this->id.') AND ':'')
 				.'uid IN (0, '.$useServer.') AND '
-				.'authenticate_be IN ('.($user_prefix=='fe'?'0,':'').($user_prefix=='be'?'1,':'').'2)'
+				.'authenticate_be IN ('.($user_table=='fe_users'?'0,':'').($user_table=='be_users'?'1,':'').'2)'
 			);
 			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($dbres)) {
 				$arrServers[] = $row;

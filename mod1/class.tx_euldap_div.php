@@ -295,6 +295,9 @@ class tx_euldap_div {
 			$regExpr = str_replace("?", ".", str_replace("*", ".*", "/^".$value."$/"));
 			if (preg_match($regExpr, strtolower($groupname))) $retValue = 1;
 		}
+		
+		if (($retValue == 0) && ($this->conf['logLevel'] == 2)) t3lib_div::devLog('tx_euldap_div:is_in_onlygroups() | filtered out: '.$groupname, 'eu_ldap', 0);
+		
 		return $retValue;
 	}
 
@@ -474,6 +477,11 @@ class tx_euldap_div {
 		// cuts of leading ','
 		if ($gid) $gid = substr($gid, 1);
 		if ($gname) $gname = substr($gname, 1);
+		
+		if ($this->conf['logLevel'] == 2) {
+			t3lib_div::devLog('tx_euldap_div:assign_groups() | names: '.$gname, 'eu_ldap', 0);
+			t3lib_div::devLog('tx_euldap_div:assign_groups() | uids: '.$gid, 'eu_ldap', 0);
+		}
 	}
 
 	/**
@@ -520,6 +528,7 @@ class tx_euldap_div {
 				
 				if(!$row) {
 					$dbres = $GLOBALS['TYPO3_DB']->exec_INSERTquery($table, $qry);
+					if ($this->conf['logLevel'] == 2) t3lib_div::devLog('tx_euldap_div:insert_newgrps() | insert: '.$GLOBALS['TYPO3_DB']->INSERTquery($table, $query), 'eu_ldap', 0);
 					$rslt = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 						'uid, title',
 						$table,
@@ -645,12 +654,13 @@ class tx_euldap_div {
 		$map_additional_fields_up = tx_euldap_div::additional_fields($map_additional_fields, $user, $user_table);
 		if (is_array($map_additional_fields_up)) $updateArray = t3lib_div::array_merge($updateArray, $map_additional_fields_up);
 		
-		/*
-		$sql = $GLOBALS['TYPO3_DB']->UPDATEquery($user_table,"lower(username) = '".strtolower($GLOBALS['TYPO3_DB']->quoteStr($username, $user_table))."' AND pid=".$pid,$updateArray);
-		debug($sql);
-		*/
 		
-		$GLOBALS['TYPO3_DB']->exec_UPDATEquery($user_table,"lower(username) = '".strtolower($GLOBALS['TYPO3_DB']->quoteStr($username, $user_table))."' AND pid=".$pid,$updateArray);
+		$GLOBALS['TYPO3_DB']->exec_UPDATEquery($user_table, "lower(username) = '".strtolower($GLOBALS['TYPO3_DB']->quoteStr($username, $user_table))."' AND pid=".$pid, $updateArray);
+		
+		if ($this->conf['logLevel'] == 2) {
+			$sql = $GLOBALS['TYPO3_DB']->UPDATEquery($user_table, "lower(username) = '".strtolower($GLOBALS['TYPO3_DB']->quoteStr($username, $user_table))."' AND pid=".$pid, $updateArray);
+			t3lib_div::devLog('tx_euldap_div:update_singleuser() | update: '.$sql, 'eu_ldap', 0);
+		}
 		
 		$arrDisplay['name'] = $name;
 		$arrDisplay['gname'] = $gname;
@@ -729,6 +739,11 @@ class tx_euldap_div {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('email', $user_table, $query);
 		$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 		
+		if ($this->conf['logLevel'] == 2) {
+			t3lib_div::devLog('tx_euldap_div:import_singleuser() | select: '.$GLOBALS['TYPO3_DB']->SELECTquery('email', $user_table, $query), 'eu_ldap', 0);
+			t3lib_div::devLog('tx_euldap_div:import_singleuser() | user found: '.is_array($row), 'eu_ldap', 0);
+		}
+		
 		if (!is_array($row) && ($username != '')){
 			$name = $user[$ldapname];
 			$email = $user[$ldapmail];
@@ -788,7 +803,9 @@ class tx_euldap_div {
 					$mapArray = tx_euldap_div::additional_fields($map_additional_fields, $user, $user_table);
 					if (is_array($mapArray)) $insValues = t3lib_div::array_merge($insValues, $mapArray);
 					
-					$GLOBALS['TYPO3_DB']->exec_INSERTquery($user_table,$insValues);
+					$GLOBALS['TYPO3_DB']->exec_INSERTquery($user_table, $insValues);
+					
+					if ($this->conf['logLevel'] == 2) t3lib_div::devLog('tx_euldap_div:import_singleuser() | insert: '.$GLOBALS['TYPO3_DB']->INSERTquery($user_table, $insValues), 'eu_ldap', 0);
 				}
 			}
 		} elseif ($username !='') {
@@ -812,8 +829,6 @@ class tx_euldap_div {
 		$user_found = 0;
 		while ($i < sizeof($arrServers) && !$user_found) {
 	       $ldapres = tx_euldap_div::search_ldap($arrServers[$i], $row['username']);
-			// HJM 2004-01-16: von == auf >= ge�ndert, da es im NML-Tree mehrere Userobjecte gibt, die nicht anhand von
-			//			Suchkriterien unterschieden werden k�nnen
 			$is_onlygroup = 0;
 			if ($ldapres['count'] >= 1) {
 				if ($user_table == 'fe_users') {
