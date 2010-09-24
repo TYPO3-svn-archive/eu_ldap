@@ -13,7 +13,7 @@ CREATE TABLE tx_euldap_server (
 	domain varchar(255) DEFAULT '' NOT NULL,
 	port int(11) DEFAULT '389' NOT NULL,
 	base_dn varchar(255) DEFAULT '' NOT NULL,
-	filter tinytext NOT NULL,
+	filter text NOT NULL,
 	memberof tinyint(4) unsigned DEFAULT '1' NOT NULL,
 	build_group varchar(255) DEFAULT '' NOT NULL,
 	only_emailusers tinyint(4) unsigned DEFAULT '0' NOT NULL,
