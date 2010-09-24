@@ -40,7 +40,7 @@
  *  190:     function assign_groups($server, $arrGroups, $ldapres, &$gid, &$gname, $table, $pid)
  *  341:     function insert_newgrps($table, $grps, $match, $pid)
  *  390:     function update_user($arrServers, $arrGroups, $username, $user_table, $pid)
- *  437:     function update_singleuser($server, $arrGroups, $user, $user_table, $pid)
+ *  437:     function update_singleuser($server, $arrGroups, $user, $user_table, $pid, $uid)
  *  515:     function import_users($pid, $arrServer, $arrGroups, $user_table)
  *  534:     function import_singleuser($arrGroups, $user, $server, $pid, $user_table, $return=false)
  *  647:     function delete_user($arrServers, $row, $user_table, $delete=true)
@@ -565,7 +565,7 @@ class tx_euldap_div {
 			if ($ldapres['count'] == 1) {
 				if ($pid == 0) $pid = $arrServers[$i]['feuser_pid'];
 				// use update_single_user from here..
-				$arrDisplay = tx_euldap_div::update_singleuser($arrServers[$i], $arrGroups, $ldapres[0], $user_table, $pid);
+				$arrDisplay = tx_euldap_div::update_singleuser($arrServers[$i], $arrGroups, $ldapres[0], $user_table, $pid, $uid);
 				$user_found = true;
 				return $arrDisplay;
 			}
@@ -585,7 +585,7 @@ class tx_euldap_div {
 	 * @param	integer		$pid: pageID; necessary for automatic creation of groups
 	 * @return	void		nothing at all..
 	 */
-	function update_singleuser($server, $arrGroups, $user, $user_table, $pid) {
+	function update_singleuser($server, $arrGroups, $user, $user_table, $pid, $uid=0) {
 		$ldapserver = $server['server'];
 		$ldapname = $server['name'];
 		$ldapusername = $server['username'];
@@ -621,13 +621,33 @@ class tx_euldap_div {
 		$name = $user[$ldapname];
 		$email = $user[$ldapmail];
 		
+		if ($uid) {
+			$where = 'deleted = 0 AND disable = 0 AND uid = '.$uid;
+		} else {
+			$where = "deleted = 0 AND disable = 0 AND lower(username) = '".strtolower($GLOBALS['TYPO3_DB']->quoteStr($username, $user_table))."'";
+		}
+		
 		if ($ldapbuildgroup || $use_memberOf) tx_euldap_div::assign_groups($server, $arrGroups, $user, $gid, $gname, $user_table, $pid);
+		
+		$dbres = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid, usergroup', $user_table, $where);
+		if ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($dbres)) {
+			$uid = $row['uid'];
+			$preserveGroups = $row['usergroup'];
+			$where = 'deleted = 0 AND disable = 0 AND uid = '.$uid;
+		}
 		// preserve groups not imported by eu_ldap
-		$dbres = $GLOBALS['TYPO3_DB']->exec_SELECTquery ('uid', ($user_table=='fe_users'?'fe_groups':'be_groups'), 'eu_ldap = 0 AND uid IN (SELECT usergroup FROM '.$user_table." WHERE lower(username) = '".strtolower($GLOBALS['TYPO3_DB']->quoteStr($username, $user_table))."')");
+		$dbres = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid', ($user_table=='fe_users'?'fe_groups':'be_groups'), 'eu_ldap = 0 AND uid IN ('.$preserveGroups.')');
 		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($dbres)) {
 			$gid .= ','.$row['uid'];
 		}
 		$gid = implode(',', array_unique(explode(',', $gid)));
+		
+		if ($this->conf['logLevel'] == 2) {
+			$sql = $GLOBALS['TYPO3_DB']->SELECTquery ('uid', ($user_table=='fe_users'?'fe_groups':'be_groups'), 'eu_ldap = 0 AND uid IN ('.$preserveGroups.')');
+			t3lib_div::devLog('tx_euldap_div:update_singleuser() | preserve groups: '.$sql, 'eu_ldap', 0);
+			t3lib_div::devLog('tx_euldap_div:update_singleuser() | preserve groups: '.$gid, 'eu_ldap', 0);
+		}
+		
 		if ($user_table == 'fe_users') {
 			$map_additional_fields =
 				'address='.$GLOBALS['TYPO3_DB']->quoteStr($ldapaddress, $user_table)
@@ -655,10 +675,10 @@ class tx_euldap_div {
 		if (is_array($map_additional_fields_up)) $updateArray = t3lib_div::array_merge($updateArray, $map_additional_fields_up);
 		
 		
-		$GLOBALS['TYPO3_DB']->exec_UPDATEquery($user_table, "lower(username) = '".strtolower($GLOBALS['TYPO3_DB']->quoteStr($username, $user_table))."' AND pid=".$pid, $updateArray);
+		$GLOBALS['TYPO3_DB']->exec_UPDATEquery($user_table, $where." AND pid=".$pid, $updateArray);
 		
 		if ($this->conf['logLevel'] == 2) {
-			$sql = $GLOBALS['TYPO3_DB']->UPDATEquery($user_table, "lower(username) = '".strtolower($GLOBALS['TYPO3_DB']->quoteStr($username, $user_table))."' AND pid=".$pid, $updateArray);
+			$sql = $GLOBALS['TYPO3_DB']->UPDATEquery($user_table, $where." AND pid=".$pid, $updateArray);
 			t3lib_div::devLog('tx_euldap_div:update_singleuser() | update: '.$sql, 'eu_ldap', 0);
 		}
 		
@@ -809,7 +829,7 @@ class tx_euldap_div {
 				}
 			}
 		} elseif ($username !='') {
-			tx_euldap_div::update_singleuser($server, $arrGroups, $user, $user_table, $pid);
+			tx_euldap_div::update_singleuser($server, $arrGroups, $user, $user_table, $pid, $row['uid']);
 		}
 		
 		return ($return)?$content:$OK;
