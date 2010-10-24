@@ -814,7 +814,7 @@ class tx_euldap_div {
 						$insValues['www'] = $GLOBALS['TYPO3_DB']->quoteStr($user[$ldapwww], $user_table);
 						$insValues['telephone'] = $GLOBALS['TYPO3_DB']->quoteStr($telephone, $user_table);
 						$insValues['fax'] = $GLOBALS['TYPO3_DB']->quoteStr($user[$ldapfax], $user_table);
-						$insValues['name'] = $GLOBALS['TYPO3_DB']->quoteStr($name);
+						$insValues['name'] = $GLOBALS['TYPO3_DB']->quoteStr($name, $user_table);
 					} else {
 						$insValues['options'] = '3';
 						$insValues['realname'] = $GLOBALS['TYPO3_DB']->quoteStr($name, $user_table);
