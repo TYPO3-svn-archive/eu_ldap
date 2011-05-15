@@ -73,7 +73,7 @@ class tx_euldap_sv1 extends tx_sv_authbase {
 				if ($this->authInfo['loginType'] == 'BE') {
 					$whereclause = 'deleted = 0 AND hidden = 0';
 				} else {
-					$whereclause = 'deleted = 0 AND hidden = 0 AND pid = '.$this->authInfo['db_user']['checkPidList'];
+					$whereclause = 'deleted = 0 AND hidden = 0'.$this->authInfo['db_user']['checki_pid_clause'];
 				}
 				
 				$dbres = $GLOBALS['TYPO3_DB']->exec_SELECTquery(

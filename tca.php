@@ -263,8 +263,10 @@ $TCA["tx_euldap_server"] = Array (
 			"exclude" => 0,        
 			"label" => "LLL:EXT:eu_ldap/locallang_db.php:tx_euldap_server.matchgrps",        
 			"config" => Array (
-				"type" => "input",    
-				"size" => "60",
+				"type" => "text",	
+				"rows" => "5",
+				"cols" => "30",
+				"eval" => "trim"
 			)
 		),
 		"timestamp" => Array (        
