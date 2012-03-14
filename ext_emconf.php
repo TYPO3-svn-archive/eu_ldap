@@ -3,7 +3,7 @@
 ########################################################################
 # Extension Manager/Repository config file for ext "eu_ldap".
 #
-# Auto generated 24-09-2010 12:39
+# Auto generated 14-03-2012 22:29
 #
 # Manual updates:
 # Only the data in the array - everything else is removed by next
@@ -15,7 +15,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'description' => 'LDAP Integration',
 	'category' => 'module',
 	'shy' => 0,
-	'version' => '2.8.10',
+	'version' => '2.8.17',
 	'dependencies' => '',
 	'conflicts' => '',
 	'priority' => '',
@@ -34,15 +34,15 @@ $EM_CONF[$_EXTKEY] = array(
 	'CGLcompliance_note' => '',
 	'constraints' => array(
 		'depends' => array(
-			'php' => '3.0.0-0.0.0',
-			'typo3' => '3.7.0-0.0.0',
+			'php' => '5.2.0-0.0.0',
+			'typo3' => '4.4.11-0.0.0',
 		),
 		'conflicts' => array(
 		),
 		'suggests' => array(
 		),
 	),
-	'_md5_values_when_last_written' => 'a:23:{s:9:"Thumbs.db";s:4:"01bc";s:16:"ext_autoload.php";s:4:"1a11";s:21:"ext_conf_template.txt";s:4:"fba9";s:12:"ext_icon.gif";s:4:"207f";s:17:"ext_localconf.php";s:4:"f489";s:15:"ext_php_api.dat";s:4:"7d5b";s:14:"ext_tables.php";s:4:"e78e";s:14:"ext_tables.sql";s:4:"33fb";s:25:"icon_tx_euldap_server.gif";s:4:"300a";s:16:"locallang_db.xml";s:4:"4259";s:7:"tca.php";s:4:"4dc0";s:14:"doc/manual.sxw";s:4:"5e69";s:28:"mod1/class.tx_euldap_div.php";s:4:"ca7c";s:14:"mod1/clear.gif";s:4:"cc11";s:13:"mod1/conf.php";s:4:"eae2";s:14:"mod1/index.php";s:4:"d4ce";s:18:"mod1/locallang.xml";s:4:"d214";s:22:"mod1/locallang_mod.xml";s:4:"4a3f";s:19:"mod1/moduleicon.gif";s:4:"207f";s:36:"scheduler/class.tx_euldap_import.php";s:4:"1bdb";s:46:"scheduler/class.tx_euldap_import_addfields.php";s:4:"6f55";s:27:"sv1/class.tx_euldap_sv1.php";s:4:"6318";s:27:"sv2/class.tx_euldap_sv2.php";s:4:"f7b9";}',
+	'_md5_values_when_last_written' => 'a:20:{s:9:"Thumbs.db";s:4:"01bc";s:16:"ext_autoload.php";s:4:"1a11";s:21:"ext_conf_template.txt";s:4:"fba9";s:12:"ext_icon.gif";s:4:"207f";s:17:"ext_localconf.php";s:4:"95e8";s:15:"ext_php_api.dat";s:4:"7d5b";s:14:"ext_tables.php";s:4:"024f";s:14:"ext_tables.sql";s:4:"4ac7";s:25:"icon_tx_euldap_server.gif";s:4:"300a";s:16:"locallang_db.xml";s:4:"4662";s:7:"tca.php";s:4:"627e";s:14:"doc/manual.sxw";s:4:"5e69";s:28:"mod1/class.tx_euldap_div.php";s:4:"886c";s:14:"mod1/clear.gif";s:4:"cc11";s:13:"mod1/conf.php";s:4:"eae2";s:14:"mod1/index.php";s:4:"1b3d";s:18:"mod1/locallang.xml";s:4:"d214";s:22:"mod1/locallang_mod.xml";s:4:"4a3f";s:19:"mod1/moduleicon.gif";s:4:"207f";s:27:"sv1/class.tx_euldap_sv1.php";s:4:"b897";}',
 	'suggests' => array(
 	),
 );
