@@ -23,23 +23,6 @@ $TCA["tx_euldap_server"] = Array (
 	)
 );
 
-$TCA['tx_euldap_scheduler'] = array (
-    'ctrl' => array (
-        'title'     => 'LLL:EXT:eu_ldap/locallang_db.xml:tx_euldap_scheduler',        
-        'label'     => 'uid',    
-        'tstamp'    => 'tstamp',
-        'crdate'    => 'crdate',
-        'cruser_id' => 'cruser_id',
-        'sortby' => 'sorting',    
-        'delete' => 'deleted',    
-        'enablecolumns' => array (        
-            'disabled' => 'hidden',
-        ),
-        'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
-        'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_euldap_scheduler.gif',
-    ),
-);
-
 $tempColumns = Array (
     "title" => Array (        
         "exclude" => 0,        

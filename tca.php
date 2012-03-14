@@ -61,7 +61,8 @@ $TCA["tx_euldap_server"] = Array (
 			"label" => "LLL:EXT:eu_ldap/locallang_db.php:tx_euldap_server.filter",		
 			"config" => Array (
 				"type" => "input",	
-				"size" => "30",	
+				"size" => "30",
+				"max" => "255",
 				"eval" => "required,trim",
 				"default" => "(&(objectClass=user)(objectCategory=person)(samaccountname=<search>))",
 			)
@@ -191,9 +192,10 @@ $TCA["tx_euldap_server"] = Array (
 			"exclude" => 0,		
 			"label" => "LLL:EXT:eu_ldap/locallang_db.php:tx_euldap_server.build_group",		
 			"config" => Array (
-				"type" => "input",	
-				"size" => "30",	
-				"eval" => "trim",
+				"type" => "text",	
+				"rows" => "5",
+				"cols" => "30",
+				"eval" => "trim"
 			)
 		),
 		"map_additional_fields" => Array (		
@@ -331,101 +333,6 @@ $TCA["tx_euldap_server"] = Array (
 			"showitem" => "--div--;Server, server, port, version, characterset, base_dn, filter, servertype, domain, user, password, --div--;Settings, automatic_import, only_emailusers, authenticate_be, feuser_pid, timestamp, --div--;Attributes, username, name, mail, address, zip, city, country, phone, fax, www, map_additional_fields, --div--;Groups, doitfe, matchgrps, memberof, build_group, fe_group, be_group"
 		)
 	)
-);
-
-$TCA['tx_euldap_scheduler'] = array (
-    'ctrl' => $TCA['tx_euldap_scheduler']['ctrl'],
-    'interface' => array (
-        'showRecordFieldList' => 'hidden,title,action,usertable,pages,interval,intervalunit'
-    ),
-    'feInterface' => $TCA['tx_euldap_scheduler']['feInterface'],
-    'columns' => array (
-        'hidden' => array (        
-            'exclude' => 1,
-            'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
-            'config'  => array (
-                'type'    => 'check',
-                'default' => '0'
-            )
-        ),
-        'title' => array (        
-            'exclude' => 0,        
-            'label' => 'LLL:EXT:eu_ldap/locallang_db.xml:tx_euldap_scheduler.title',        
-            'config' => array (
-                'type' => 'input',    
-                'size' => '30',    
-                'eval' => 'required,trim',
-            )
-        ),
-        'action' => array (        
-            'exclude' => 0,        
-            'label' => 'LLL:EXT:eu_ldap/locallang_db.xml:tx_euldap_scheduler.action',        
-            'config' => array (
-                'type' => 'check',
-                'cols' => 4,
-                'items' => array (
-                    array('LLL:EXT:eu_ldap/locallang_db.xml:tx_euldap_scheduler.action.I.0', ''),
-                    array('LLL:EXT:eu_ldap/locallang_db.xml:tx_euldap_scheduler.action.I.1', ''),
-                    array('LLL:EXT:eu_ldap/locallang_db.xml:tx_euldap_scheduler.action.I.2', ''),
-                ),
-            )
-        ),
-        'usertable' => array (        
-            'exclude' => 0,        
-            'label' => 'LLL:EXT:eu_ldap/locallang_db.xml:tx_euldap_scheduler.usertable',        
-            'config' => array (
-                'type' => 'check',
-                'cols' => 4,
-                'items' => array (
-                    array('LLL:EXT:eu_ldap/locallang_db.xml:tx_euldap_scheduler.usertable.I.0', ''),
-                    array('LLL:EXT:eu_ldap/locallang_db.xml:tx_euldap_scheduler.usertable.I.1', ''),
-                ),
-            )
-        ),
-        'pages' => array (        
-            'exclude' => 0,        
-            'label' => 'LLL:EXT:eu_ldap/locallang_db.xml:tx_euldap_scheduler.pages',        
-            'config' => array (
-                'type' => 'group',    
-                'internal_type' => 'db',    
-                'allowed' => 'pages',    
-                'size' => 5,    
-                'minitems' => 0,
-                'maxitems' => 20,
-            )
-        ),
-        'interval' => array (        
-            'exclude' => 0,        
-            'label' => 'LLL:EXT:eu_ldap/locallang_db.xml:tx_euldap_scheduler.interval',        
-            'config' => array (
-                'type' => 'input',    
-                'size' => '5',    
-                'max' => '2',    
-                'range' => array ('lower'=>0,'upper'=>1000),    
-                'eval' => 'required,int',
-            )
-        ),
-        'intervalunit' => array (        
-            'exclude' => 0,        
-            'label' => 'LLL:EXT:eu_ldap/locallang_db.xml:tx_euldap_scheduler.intervalunit',        
-            'config' => array (
-                'type' => 'select',
-                'items' => array (
-                    array('LLL:EXT:eu_ldap/locallang_db.xml:tx_euldap_scheduler.intervalunit.I.0', '60'),
-                    array('LLL:EXT:eu_ldap/locallang_db.xml:tx_euldap_scheduler.intervalunit.I.1', '3600'),
-                    array('LLL:EXT:eu_ldap/locallang_db.xml:tx_euldap_scheduler.intervalunit.I.2', '86400'),
-                ),
-                'size' => 1,    
-                'maxitems' => 1,
-            )
-        ),
-    ),
-    'types' => array (
-        '0' => array('showitem' => 'hidden;;1;;1-1-1, title;;;;2-2-2, action;;;;3-3-3, usertable, pages, interval, intervalunit')
-    ),
-    'palettes' => array (
-        '1' => array('showitem' => '')
-    )
 );
 
 ?>

@@ -15,7 +15,7 @@ CREATE TABLE tx_euldap_server (
 	base_dn varchar(255) DEFAULT '' NOT NULL,
 	filter text NOT NULL,
 	memberof tinyint(4) unsigned DEFAULT '1' NOT NULL,
-	build_group varchar(255) DEFAULT '' NOT NULL,
+	build_group text NOT NULL,
 	only_emailusers tinyint(4) unsigned DEFAULT '0' NOT NULL,
 	automatic_import tinyint(4) unsigned DEFAULT '1' NOT NULL,
 	name varchar(255) DEFAULT 'displayname' NOT NULL,
@@ -33,9 +33,9 @@ CREATE TABLE tx_euldap_server (
 	version tinyint(4) unsigned DEFAULT '3' NOT NULL,
 	authenticate_be tinyint(4) unsigned DEFAULT '0' NOT NULL,
 	doitfe tinyint(3) unsigned DEFAULT '0' NOT NULL,
-	matchgrps text NOT NULL,
+	matchgrps text,
 	timestamp varchar(255) DEFAULT 'logintime' NOT NULL,
-	map_additional_fields text DEFAULT '' NOT NULL,
+	map_additional_fields text,
 	fe_group varchar(255) DEFAULT '' NOT NULL,
 	be_group varchar(255) DEFAULT '' NOT NULL,
 	feuser_pid int(11) unsigned DEFAULT '0' NOT NULL,
@@ -63,25 +63,4 @@ CREATE TABLE fe_users (
 CREATE TABLE be_users (
 	description varchar(255) DEFAULT '' NOT NULL,
 	tx_euldap_dn varchar(255) DEFAULT '' NOT NULL
-);
-
-CREATE TABLE tx_euldap_scheduler (
-    uid int(11) NOT NULL auto_increment,
-    pid int(11) DEFAULT '0' NOT NULL,
-    tstamp int(11) DEFAULT '0' NOT NULL,
-    crdate int(11) DEFAULT '0' NOT NULL,
-    cruser_id int(11) DEFAULT '0' NOT NULL,
-    sorting int(10) DEFAULT '0' NOT NULL,
-    deleted tinyint(4) DEFAULT '0' NOT NULL,
-    hidden tinyint(4) DEFAULT '0' NOT NULL,
-    title varchar(255) DEFAULT '' NOT NULL,
-    action int(11) DEFAULT '0' NOT NULL,
-    usertable int(11) DEFAULT '0' NOT NULL,
-    pages text,
-    intervalvalue int(11) DEFAULT '0' NOT NULL,
-    intervalunit int(11) DEFAULT '0' NOT NULL,
-    lastrun int(11) DEFAULT '0' NOT NULL,
-    
-    PRIMARY KEY (uid),
-    KEY parent (pid)
 );
