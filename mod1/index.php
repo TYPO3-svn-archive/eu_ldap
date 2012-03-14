@@ -254,7 +254,7 @@
 						);
 						while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($dbres)) {
 							$ldapserver = $row['server'];
-							$ldapres = $this->tx_euldap_div->search_ldap($row, '*');
+							$ldapres = $this->tx_euldap_div->search_ldap($row, '*', false);
 							$content = '<div>'.$ldapres['count'].' '.$LANG->getLL('users').'</div>';
 							$this->content .= $this->doc->section($ldapserver.":", $content, 0, 1);
 						}
@@ -312,7 +312,7 @@
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'*',
 				$user_prefix.'_users',
-				'NOT deleted'
+				'deleted = 0'
 			);
 			// LDAP
 			$dbres = $GLOBALS['TYPO3_DB']->exec_SELECTquery(

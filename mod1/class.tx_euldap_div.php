@@ -93,8 +93,31 @@ class tx_euldap_div {
 			$this->csObj = t3lib_div::makeInstance('t3lib_cs');
 		}
 		$this->remoteChar = $this->csObj->parse_charset($charset ? $charset : 'utf-8');
-		$this->localChar = $this->csObj->parse_charset($TYPO3_CONF_VARS['BE']['forceCharset'] ? $TYPO3_CONF_VARS['BE']['forceCharset'] : 'iso-8859-1');
+		$this->localChar = $this->csObj->parse_charset($TYPO3_CONF_VARS['BE']['forceCharset'] ? $TYPO3_CONF_VARS['BE']['forceCharset'] : 'utf-8');
 	}
+	
+	
+	function sanitizeQuery($string) {
+		$sanitized = array(
+			'\\' => '\5c',
+			'*' => '\2a',
+			'(' => '\28',
+			')' => '\29',
+			"\x00" => '\00'
+		);
+		$res = str_replace(array_keys($sanitized), array_values($sanitized), $string);
+		return $res;
+	}
+	
+	
+	function sanitizeCredentials($string) {
+		$sanitized = array(
+			"\x00" => '\00'
+		);
+		$res = str_replace(array_keys($sanitized), array_values($sanitized), $string);
+		return $res;
+	}
+	
 
 	/**
 	 * Gets object from ldap tree if the given findname can be found.
@@ -103,12 +126,13 @@ class tx_euldap_div {
 	 * @param	string		$findname: username to look for
 	 * @return	array		all ldap entries for user or false
 	 */
-	function search_ldap($server_info, $findname) {
+	function search_ldap($server_info, $findname, $doSanitize=true) {
 		if ($findname) {
 			
 			// convert character set local -> remote
 			$this->remoteChar = $this->csObj->parse_charset($server_info['characterset']);
 			$findname = $this->csObj->conv($findname, $this->localChar, $this->remoteChar);
+			if ($doSanitize) $findname = tx_euldap_div::sanitizeQuery($findname);
 			
 			$server = $server_info['server'];
 			$port = $server_info['port'];
@@ -175,6 +199,7 @@ class tx_euldap_div {
 
             # Get the first entry identifier
             if ($entry_id = ldap_first_entry($resource, $search)) {
+            
             	  $dn = 0;
                   # Iterate over the entries
                   while ($entry_id) {
@@ -238,7 +263,7 @@ class tx_euldap_div {
 				#$ldapkey = trim($ldapkey);
 				#$tablekey = trim($tablekey);
 				if ($ldapres[$ldapkey]) {
-					$insertArray[$tablekey] = $GLOBALS['TYPO3_DB']->quoteStr($ldapres[$ldapkey], $table);
+					$insertArray[$tablekey] = $ldapres[$ldapkey];
 				}
 			}
 		}
@@ -254,16 +279,16 @@ class tx_euldap_div {
 	function use_memberof($servertype) {
 		switch($servertype) {
 			case 0:
-				$use_memberOf = 'memberOf';
+				$use_memberOf = 'memberof';
 				break;
 			case 1:
-				$use_memberOf = 'memberOf';
+				$use_memberOf = 'memberof';
 				break;
 			case 2:
 				$use_memberOf = 'groupmembership';
 				break;
 			case 3:
-				$use_memberOf = 'posixGroup';
+				$use_memberOf = 'posixgroup';
 				break;
 		}
 
@@ -327,14 +352,14 @@ class tx_euldap_div {
 		$fe_groups = $server['fe_group'];
 		$be_groups = $server['be_group'];
 		
-		if (''.$use_memberOf != '0') {
+		if ($use_memberOf) {
 
 			$k = 0;
 			$gid = '';
 			$department = '';
 			$gname = '';
 
-			if ($memberOf == 'posixGroup') {
+			if ($memberOf == 'posixgroup') {
 				$uid = $ldapres['uid'];
 				$server['filter'] = "(&(objectclass=posixGroup)(|(memberUid=<search>)(gidNumber=" . $ldapres['gidnumber'] . ")))";
 				$group_info = tx_euldap_div::search_ldap($server, $uid);
@@ -362,9 +387,31 @@ class tx_euldap_div {
 					$k++;
 				}
 			} else {
-				if (count($ldapres[$memberOf]) == 0) $memberOf = strtolower($memberOf);
-				while ($k < count($ldapres[$memberOf])) {
-					$department = $ldapres[$memberOf][$k];
+				if (is_array($ldapres[$memberOf])) {
+					while ($k < count($ldapres[$memberOf])) {
+						$department = $ldapres[$memberOf][$k];
+						$equal = strpos($department, 'cn=');
+						$comma = strpos($department, ',', $equal);
+						$department = substr($department, $equal+3, $comma-$equal-3);
+						if ($department) {
+							$j = 0;
+							$group_found = false;
+							while (($j < sizeof($arrGroups)) && !($group_found)) {
+								if (strtolower($arrGroups[$j]['title']) == strtolower($department)) {
+									$group_found = true;
+									if (tx_euldap_div::is_in_onlygroups($server['matchgrps'], $arrGroups[$j]['title'])) {
+										$gid .= ','.$arrGroups[$j]['uid'];
+										$gname .= ','.$arrGroups[$j]['title'];
+									}
+								}
+								$j++;
+							}
+							if (!$group_found && tx_euldap_div::is_in_onlygroups($server['matchgrps'], $department)) $newgroups[] = $department;
+						}
+						$k++;
+					}
+				} else {
+					$department = $ldapres[$memberOf];
 					$equal = strpos($department, 'cn=');
 					$comma = strpos($department, ',', $equal);
 					$department = substr($department, $equal+3, $comma-$equal-3);
@@ -383,7 +430,6 @@ class tx_euldap_div {
 						}
 						if (!$group_found && tx_euldap_div::is_in_onlygroups($server['matchgrps'], $department)) $newgroups[] = $department;
 					}
-					$k++;
 				}
 			}
 		} else {
@@ -560,8 +606,6 @@ class tx_euldap_div {
 		while (($i < count($arrServers)) && !($user_found)) {
 			$ldapres = tx_euldap_div::search_ldap($arrServers[$i], $username);
 			
-			# print_r($ldapres);
-			
 			if ($ldapres['count'] == 1) {
 				if ($pid == 0) $pid = $arrServers[$i]['feuser_pid'];
 				// use update_single_user from here..
@@ -600,6 +644,7 @@ class tx_euldap_div {
 		if ($this->importGroups) {
 			$ldapbuildgroup = $server['build_group'];
 			$use_memberOf = $server['memberof'];
+			$groupfilter = $server['matchgrps'];
 		}
 		$map_additional_fields = $server['map_additional_fields'];
 		if ($use_memberOf) $use_memberOf = tx_euldap_div::use_memberof($server['servertype']);
@@ -629,64 +674,67 @@ class tx_euldap_div {
 		
 		if ($ldapbuildgroup || $use_memberOf) tx_euldap_div::assign_groups($server, $arrGroups, $user, $gid, $gname, $user_table, $pid);
 		
-		$dbres = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid, usergroup', $user_table, $where);
-		if ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($dbres)) {
-			$uid = $row['uid'];
-			$preserveGroups = $row['usergroup'];
-			$where = 'deleted = 0 AND disable = 0 AND uid = '.$uid;
+		if (($groupfilter == '') || $gname) {
+		
+			$dbres = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid, usergroup', $user_table, $where);
+			if ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($dbres)) {
+				$uid = $row['uid'];
+				$preserveGroups = $row['usergroup'];
+				$where = 'deleted = 0 AND disable = 0 AND uid = '.$uid;
+			}
+			// preserve groups not imported by eu_ldap
+			$dbres = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid', ($user_table=='fe_users'?'fe_groups':'be_groups'), 'eu_ldap = 0 AND uid IN ('.$preserveGroups.')');
+			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($dbres)) {
+				$gid .= ','.$row['uid'];
+			}
+			$gid = implode(',', array_unique(explode(',', $gid)));
+			
+			if ($this->conf['logLevel'] == 2) {
+				$sql = $GLOBALS['TYPO3_DB']->SELECTquery ('uid', ($user_table=='fe_users'?'fe_groups':'be_groups'), 'eu_ldap = 0 AND uid IN ('.$preserveGroups.')');
+				t3lib_div::devLog('tx_euldap_div:update_singleuser() | preserve groups: '.$sql, 'eu_ldap', 0);
+				t3lib_div::devLog('tx_euldap_div:update_singleuser() | preserve groups: '.$gid, 'eu_ldap', 0);
+			}
+			
+			if ($user_table == 'fe_users') {
+				$map_additional_fields =
+					'address='.$GLOBALS['TYPO3_DB']->quoteStr($ldapaddress, $user_table)
+					.',zip='.$GLOBALS['TYPO3_DB']->quoteStr($ldapzip, $user_table)
+					.',city='.$GLOBALS['TYPO3_DB']->quoteStr($ldapcity, $user_table)
+					.',country='.$GLOBALS['TYPO3_DB']->quoteStr($ldapcountry, $user_table)
+					.',address='.$GLOBALS['TYPO3_DB']->quoteStr($ldapaddress, $user_table)
+					.',telephone='.$GLOBALS['TYPO3_DB']->quoteStr($ldapphone, $user_table)
+					.',fax='.$GLOBALS['TYPO3_DB']->quoteStr($ldapfax, $user_table)
+					.',www='.$GLOBALS['TYPO3_DB']->quoteStr($ldapwww, $user_table)
+					.($map_additional_fields?','.$map_additional_fields:'');
+				$updateArray = array('tstamp' => time(),
+					'name' => $GLOBALS['TYPO3_DB']->quoteStr($name, $user_table),
+					'email' => $GLOBALS['TYPO3_DB']->quoteStr($email, $user_table)
+				);
+				if ($ldapbuildgroup || $use_memberOf) $updateArray['usergroup'] = $gid;
+			} else {
+				$updateArray = array('tstamp' => time(),
+					'email' => $GLOBALS['TYPO3_DB']->quoteStr($email, $user_table),
+					'realname' => $GLOBALS['TYPO3_DB']->quoteStr($name, $user_table)
+				);
+				if ($ldapbuildgroup || $use_memberOf) $updateArray['usergroup'] = $gid;
+			}
+			$map_additional_fields_up = tx_euldap_div::additional_fields($map_additional_fields, $user, $user_table);
+			if (is_array($map_additional_fields_up)) $updateArray = t3lib_div::array_merge($updateArray, $map_additional_fields_up);
+			
+			
+			$GLOBALS['TYPO3_DB']->exec_UPDATEquery($user_table, $where." AND pid=".$pid, $updateArray);
+			
+			if ($this->conf['logLevel'] == 2) {
+				$sql = $GLOBALS['TYPO3_DB']->UPDATEquery($user_table, $where." AND pid=".$pid, $updateArray);
+				t3lib_div::devLog('tx_euldap_div:update_singleuser() | update: '.$sql, 'eu_ldap', 0);
+			}
+			
+			$arrDisplay['name'] = $name;
+			$arrDisplay['gname'] = $gname;
+			$arrDisplay['email'] = $email;
+			$arrDisplay['ldapserver'] = $ldapserver;
+			return $arrDisplay;
 		}
-		// preserve groups not imported by eu_ldap
-		$dbres = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid', ($user_table=='fe_users'?'fe_groups':'be_groups'), 'eu_ldap = 0 AND uid IN ('.$preserveGroups.')');
-		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($dbres)) {
-			$gid .= ','.$row['uid'];
-		}
-		$gid = implode(',', array_unique(explode(',', $gid)));
-		
-		if ($this->conf['logLevel'] == 2) {
-			$sql = $GLOBALS['TYPO3_DB']->SELECTquery ('uid', ($user_table=='fe_users'?'fe_groups':'be_groups'), 'eu_ldap = 0 AND uid IN ('.$preserveGroups.')');
-			t3lib_div::devLog('tx_euldap_div:update_singleuser() | preserve groups: '.$sql, 'eu_ldap', 0);
-			t3lib_div::devLog('tx_euldap_div:update_singleuser() | preserve groups: '.$gid, 'eu_ldap', 0);
-		}
-		
-		if ($user_table == 'fe_users') {
-			$map_additional_fields =
-				'address='.$GLOBALS['TYPO3_DB']->quoteStr($ldapaddress, $user_table)
-				.',zip='.$GLOBALS['TYPO3_DB']->quoteStr($ldapzip, $user_table)
-				.',city='.$GLOBALS['TYPO3_DB']->quoteStr($ldapcity, $user_table)
-				.',country='.$GLOBALS['TYPO3_DB']->quoteStr($ldapcountry, $user_table)
-				.',address='.$GLOBALS['TYPO3_DB']->quoteStr($ldapaddress, $user_table)
-				.',telephone='.$GLOBALS['TYPO3_DB']->quoteStr($ldapphone, $user_table)
-				.',fax='.$GLOBALS['TYPO3_DB']->quoteStr($ldapfax, $user_table)
-				.',www='.$GLOBALS['TYPO3_DB']->quoteStr($ldapwww, $user_table)
-				.($map_additional_fields?','.$map_additional_fields:'');
-			$updateArray = array('tstamp' => time(),
-				'name' => $GLOBALS['TYPO3_DB']->quoteStr($name, $user_table),
-				'email' => $GLOBALS['TYPO3_DB']->quoteStr($email, $user_table)
-			);
-			if ($ldapbuildgroup || $use_memberOf) $updateArray['usergroup'] = $gid;
-		} else {
-			$updateArray = array('tstamp' => time(),
-				'email' => $GLOBALS['TYPO3_DB']->quoteStr($email, $user_table),
-				'realname' => $GLOBALS['TYPO3_DB']->quoteStr($name, $user_table)
-			);
-			if ($ldapbuildgroup || $use_memberOf) $updateArray['usergroup'] = $gid;
-		}
-		$map_additional_fields_up = tx_euldap_div::additional_fields($map_additional_fields, $user, $user_table);
-		if (is_array($map_additional_fields_up)) $updateArray = t3lib_div::array_merge($updateArray, $map_additional_fields_up);
-		
-		
-		$GLOBALS['TYPO3_DB']->exec_UPDATEquery($user_table, $where." AND pid=".$pid, $updateArray);
-		
-		if ($this->conf['logLevel'] == 2) {
-			$sql = $GLOBALS['TYPO3_DB']->UPDATEquery($user_table, $where." AND pid=".$pid, $updateArray);
-			t3lib_div::devLog('tx_euldap_div:update_singleuser() | update: '.$sql, 'eu_ldap', 0);
-		}
-		
-		$arrDisplay['name'] = $name;
-		$arrDisplay['gname'] = $gname;
-		$arrDisplay['email'] = $email;
-		$arrDisplay['ldapserver'] = $ldapserver;
-		return $arrDisplay;
 	}
 
 	/**
@@ -698,7 +746,7 @@ class tx_euldap_div {
 	 * @return	string		html content with results
 	 */
 	function import_users($arrServer, $arrGroups, $user_table) {
-		$ldapres = tx_euldap_div::search_ldap($arrServer, '*');
+		$ldapres = tx_euldap_div::search_ldap($arrServer, '*', false);
 		for ($l=0; $l<$ldapres['count']; $l++) {
 			$content .= tx_euldap_div::import_singleuser($arrGroups, $ldapres[$l], $arrServer, $user_table, 1);
 		}
@@ -733,6 +781,7 @@ class tx_euldap_div {
 		if ($this->importGroups) {
 			$ldapbuildgroup = $server['build_group'];
 			$use_memberOf = $server['memberof'];
+			$groupfilter = $server['matchgrps'];
 		}
 		$map_additional_fields = $server['map_additional_fields'];
 		if ($use_memberOf) $use_memberOf = tx_euldap_div::use_memberof($server['servertype']);
@@ -764,21 +813,23 @@ class tx_euldap_div {
 			t3lib_div::devLog('tx_euldap_div:import_singleuser() | user found: '.is_array($row), 'eu_ldap', 0);
 		}
 		
-		if (!is_array($row) && ($username != '')){
+		if (!is_array($row) && ($username != '')) {
 			$name = $user[$ldapname];
 			$email = $user[$ldapmail];
 			$telephone = $user[$ldapphone];
 			
 			if (($email) || !($only_emailusers)) {
-				if ($ldapbuildgroup || $use_memberOf) tx_euldap_div::assign_groups($server, $arrGroups, $user, $gid, $gname, $user_table, $pid);
-				$show = false;
-				if ($server['matchgrps']) {
-					if ($gname) $show = true;
-				} else {
-					$show = true;
-				}
+				if ($ldapbuildgroup || $use_memberOf) {
+					tx_euldap_div::assign_groups($server, $arrGroups, $user, $gid, $gname, $user_table, $pid);
+				} else { 
+					$fe_groups = $server['fe_group'];
+					$be_groups = $server['be_group'];
+					if (($user_table == 'fe_users') && $fe_groups) $gid = $fe_groups;
+					if (($user_table == 'be_users') && $be_groups) $gid = $be_groups;
+					$use_groups = true;
+				} 
 				
-				if ($show) {
+				if (($groupfilter == '') || $gname) {
 					$password = '';
 					$content.= '<tr>
 							<td>'.$username.'</td>
@@ -791,6 +842,7 @@ class tx_euldap_div {
 							<td>&nbsp;&nbsp;</td>
 							<td>'.$ldapserver.'</td>
 						</tr>';
+					
 					srand ((double)microtime()*1000000);
 					for ($l=1;$l<11;$l++) {
 						$rand_num = round(rand(1, 26) + 97, 0);
@@ -804,25 +856,23 @@ class tx_euldap_div {
 						'password' => $password,
 						'tx_euldap_dn' => $user['dn']
 					);
-					if ($ldapbuildgroup || $use_memberOf) $insValues['usergroup'] = $gid;
-
+					if ($ldapbuildgroup || $use_memberOf || $use_groups) $insValues['usergroup'] = $gid;
 					if ($user_table == 'fe_users') {
-						$insValues['address'] = $GLOBALS['TYPO3_DB']->quoteStr($user[$ldapaddress], $user_table);
-						$insValues['zip'] = $GLOBALS['TYPO3_DB']->quoteStr($user[$ldapzip], $user_table);
-						$insValues['city'] = $GLOBALS['TYPO3_DB']->quoteStr($user[$ldapcity], $user_table);
-						$insValues['country'] = $GLOBALS['TYPO3_DB']->quoteStr($user[$ldapcountry], $user_table);
-						$insValues['www'] = $GLOBALS['TYPO3_DB']->quoteStr($user[$ldapwww], $user_table);
-						$insValues['telephone'] = $GLOBALS['TYPO3_DB']->quoteStr($telephone, $user_table);
-						$insValues['fax'] = $GLOBALS['TYPO3_DB']->quoteStr($user[$ldapfax], $user_table);
-						$insValues['name'] = $GLOBALS['TYPO3_DB']->quoteStr($name, $user_table);
+						$insValues['address'] = $user[$ldapaddress];
+						$insValues['zip'] = $user[$ldapzip];
+						$insValues['city'] = $user[$ldapcity];
+						$insValues['country'] = $user[$ldapcountry];
+						$insValues['www'] = $user[$ldapwww];
+						$insValues['telephone'] = $telephone;
+						$insValues['fax'] = $user[$ldapfax];
+						$insValues['name'] = $name;
 					} else {
 						$insValues['options'] = '3';
-						$insValues['realname'] = $GLOBALS['TYPO3_DB']->quoteStr($name, $user_table);
+						$insValues['realname'] = $name;
 						$insValues['fileoper_perms'] = '1';
 					}
 					$mapArray = tx_euldap_div::additional_fields($map_additional_fields, $user, $user_table);
-					if (is_array($mapArray)) $insValues = t3lib_div::array_merge($insValues, $mapArray);
-					
+					if (is_array($mapArray)) $insValues = t3lib_div::array_merge($insValues, $mapArray);			
 					$GLOBALS['TYPO3_DB']->exec_INSERTquery($user_table, $insValues);
 					
 					if ($this->conf['logLevel'] == 2) t3lib_div::devLog('tx_euldap_div:import_singleuser() | insert: '.$GLOBALS['TYPO3_DB']->INSERTquery($user_table, $insValues), 'eu_ldap', 0);
@@ -896,7 +946,10 @@ class tx_euldap_div {
 		// convert character set local -> remote
 		$this->remoteChar = $this->csObj->parse_charset($server_info['characterset']);
 		$username = $this->csObj->conv($username, $this->localChar, $this->remoteChar);
+		$username = tx_euldap_div::sanitizeCredentials($username);
 		$password = $this->csObj->conv($password, $this->localChar, $this->remoteChar);
+		$password = tx_euldap_div::sanitizeCredentials($password);
+		
 		
 		$server = $server_info['server'];
 		$ldapport = $server_info['port'];
